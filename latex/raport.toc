@@ -1,0 +1,25 @@
+\select@language {polish}
+\contentsline {chapter}{\numberline {1}Wst\IeC {\k e}p}{3}
+\contentsline {chapter}{\numberline {2}Cele projektu}{5}
+\contentsline {section}{\numberline {2.1}Aspekt in\IeC {\.z}ynierski}{5}
+\contentsline {section}{\numberline {2.2}Aspekt badawczy}{5}
+\contentsline {section}{\numberline {2.3}Kinematyka}{6}
+\contentsline {chapter}{\numberline {3}Pierwowz\IeC {\'o}r}{7}
+\contentsline {section}{\numberline {3.1}R\IeC {\'o}\IeC {\.z}nice w stosunku do pierwowzoru}{7}
+\contentsline {chapter}{\numberline {4}Struktura manipulatora}{9}
+\contentsline {section}{\numberline {4.1}Konfiguracje niedozwolone}{9}
+\contentsline {section}{\numberline {4.2}Kinematyka manipulatora}{9}
+\contentsline {subsection}{\numberline {4.2.1}Prosta kinematyka manipulatora}{9}
+\contentsline {subsection}{\numberline {4.2.2}Odwrotna kinematyka manipulatora}{9}
+\contentsline {chapter}{\numberline {5}Wyznaczenie wymiar\IeC {\'o}w manipulatora}{11}
+\contentsline {section}{\numberline {5.1}Obliczenie przestrzeni roboczej manipulatora}{11}
+\contentsline {subsection}{\numberline {5.1.1}Przestrze\IeC {\'n} robocza na bazie prostej kinematyki}{11}
+\contentsline {subsection}{\numberline {5.1.2}Przestrze\IeC {\'n} robocza na bazie odwrotnej kinematyki}{11}
+\contentsline {subsection}{\numberline {5.1.3}Obwiednia przestrzeni roboczej}{12}
+\contentsline {subsection}{\numberline {5.1.4}Wyznaczanie powierzchni przestrzeni roboczej}{12}
+\contentsline {section}{\numberline {5.2}Wyznaczenie wymiar\IeC {\'o}w manipulatora na podstawie przestrzeni roboczej}{12}
+\contentsline {subsection}{\numberline {5.2.1}Wyznaczenie wymiar\IeC {\'o}w pr\IeC {\'o}bnej wersji manipulatora}{12}
+\contentsline {subsection}{\numberline {5.2.2}Wyznaczenie wymiar\IeC {\'o}w ostatecznej wersji manipulatora}{13}
+\contentsline {chapter}{\numberline {6}Podsumowanie projektu}{17}
+\contentsline {chapter}{\numberline {A}Zawarto\IeC {\'s}\IeC {\'c} p\IeC {\l }yty CD}{19}
+\contentsline {chapter}{Bibliografia}{19}
