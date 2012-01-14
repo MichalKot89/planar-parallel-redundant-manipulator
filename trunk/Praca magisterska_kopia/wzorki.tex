@@ -1,0 +1,73 @@
+\documentclass[12pt,a4paper,polish]{article}
+
+\topmargin -1.6cm
+\addtolength{\textheight}{4cm}
+\textwidth  15.5cm
+
+\leftmargin      5mm
+\rightmargin     5mm
+\oddsidemargin   5mm
+\evensidemargin  5mm
+%dodać pakiety polski, hyperrdef i pslatex 
+
+\usepackage[utf8]{inputenc}
+%\usepackage{pslatex}
+\usepackage{graphicx}
+
+
+\date{\today}
+
+
+
+\makeatletter
+\newcommand{\linia}{\rule{\linewidth}{0.4mm}}
+\renewcommand{\maketitle}{\begin{titlepage}
+    \vspace*{1cm}
+    \begin{center}\small
+    University of Technology in Wrocław\\
+    Electronics department\\
+    Advanced Applied Electronics faculty
+    \end{center}
+    \vspace{3cm}
+    \noindent\linia
+    \begin{center}
+      \LARGE \textsc{\@title}
+         \end{center}
+     \linia
+    \vspace{0.5cm}
+    \begin{flushright}
+    \begin{minipage}{5cm}
+    \textit{\small Author:}\\
+    \normalsize \textsc{\@author} \par
+    \end{minipage}
+    \vspace{2.5cm}
+    \hspace{8cm}\\
+     {\small Instructor:}\\
+        Dr inż. Tomasz Podżorny
+     \end{flushright}  
+    \vspace*{\stretch{5}}
+    \begin{center}
+    \@date\\
+    Wrocław
+    \end{center}
+  \end{titlepage}%
+}
+\makeatother
+\title{Advanced Microcontrollers\\ Project report}
+\author{Dora Sumisławska\\Album nr: 163110 \\163110@student.pwr.wroc.pl\\\\
+Michał Kot\\Album nr: 163065 \\163065@student.pwr.wroc.pl\\\\
+Dawid Sysak\\Album nr: 163166 \\163166@student.pwr.wroc.pl\\\\}  
+\title{Filtering and visualisation of audio filter module}  
+
+\begin{document}
+\maketitle
+$
+[x_{a2}\\y_{a2}]=[L+l_1 c_{a1} +l_2 c_{a1+a2}\\l_1 s_{a1} +l_2 s_{a1+a2}]$ \\
+$[x_{b2}\\y_{b2}]=[-L+l_1 c_{b1} +l_2 c_{b1+b2}\\l_1 s_{b1} +l_2 s_{b1+b2}] $ \\
+$[x_3\\y_3] $
+$+\pi/2. $ \\
+$(x_{b2}-x_{a2})^2+(y_{b2}-y_{a2})^2=l_3^2 $ \\
+$[x_3,y_3,\theta_3] $ \\
+
+
+\end{document}
