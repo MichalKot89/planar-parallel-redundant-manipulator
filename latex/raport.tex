@@ -140,18 +140,24 @@ Pomysł na stworzenie planarnego manipulatora zrodził się po przeczytaniu arty
 "Hybrid position/force control of a flexible parallel manipulator" \cite{wzor}. 
 Autorzy tego artykułu podjęli się stworzenia równoległego manipulatora, którego cechą charakterystyczną
 jest elastyczna końcówka umożliwiająca pomiary sił/momentów działających na efektor. 
-Jak widzimy na rysunku \ref{rys:flex}, do pomiaru siły został wykorzystany czujnik sił/momentów
+Jak widzimy na rysunku \ref{rys:pierwowzor_zdjecie}, do pomiaru siły został wykorzystany czujnik sił/momentów
 o sześciu stopniach swobody, dzięki czemu możliwe jest wykrycie każdego rodzaju deformacji elastycznej
 końcówki. Zaletą takiego rozwiązania jest zdolność do analizy sił i momentów, którymi otoczenie
 oddziałuje na efektor. W rezultacie, poprzez zastosowanie hybrydowego sterowania, polegającego
 na jednoczesnym kontrolowaniu położenia efektora i sił na niego oddziałujących, jesteśmy w stanie zapewnić
 dokładniejszą i bezpieczniejszą interakcję manipulatora z otoczeniem. Wynika to z braku dużych sił powstających
 przy wykorzystaniu jedynie kontroli położenia.
-
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.6\textwidth]{grafika/pierwowzor_zdjecie}
+  \caption{Pierwowzór konstruowanego manipulatora}
+  \label{rys:pierwowzor_zdjecie}  
+\end{figure}
 
 \section{Różnice w stosunku do pierwowzoru}
 Stworzony w ramach niniejszej pracy magisterskiej manipulator różni się jednakże w wielu aspektach od
-swojego pierwowzoru. Konstrukcja tamtego manipulatora nie zakładała redundancji, która jest jednym z
+swojego pierwowzoru. Na rysunku \ref{rys:pierwowzor_model} znajduje się model pierwowzoru, jednakże po szeregu badań i analiz 
+okazało się, że konstrukcja tamtego manipulatora nie zakładała redundancji, która jest jednym z
 fundamentów tego projektu. Redundancja, która umożliwia osiągnięcie jednego położenia efektora przy pomocy
 wielu różnych konfiguracji manipulatora, została zapewniona poprzez wprowadzenie jednego dodatkowego przegubu
 pasywnego. Co więcej, w stosunku do pierwowzoru elastyczne ramie połączone z czujnikiem sił i momentów
@@ -159,7 +165,20 @@ zostało zastąpione przez inny mechanizm, opisany dokładniej w rozdziale \ref{
 Dzięki zmianom w konstrukcji manipulator stworzony w ramach tego projektu posiada większą gamę
 potencjalnych zastosowań, np. możliwość uczenia się. 
 
-\chapter{Struktura manipulatora}
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.6\textwidth]{grafika/pierwowzor_model}
+  \caption{Model pierwowzoru konstruowanego manipulatora}
+  \label{rys:pierwowzor_model}  
+\end{figure}
+
+
+\section{Inne projekty wykorzystujące podobne rozwiązania}
+
+
+\chapter{Testowe modele manipulatora}
+
+\chapter{Struktura manipulatora docelowego}
 
 \section{Konfiguracje niedozwolone}\label{sec:konfiguracje_niedozwolone}
 
