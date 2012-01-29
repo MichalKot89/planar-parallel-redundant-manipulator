@@ -1,27 +1,37 @@
 \select@language {polish}
 \contentsline {chapter}{\numberline {1}Wst\IeC {\k e}p}{3}
-\contentsline {chapter}{\numberline {2}Cele projektu}{5}
-\contentsline {section}{\numberline {2.1}Aspekt in\IeC {\.z}ynierski}{5}
-\contentsline {section}{\numberline {2.2}Aspekt badawczy}{5}
-\contentsline {section}{\numberline {2.3}Kinematyka}{6}
-\contentsline {chapter}{\numberline {3}Pierwowz\IeC {\'o}r}{7}
-\contentsline {section}{\numberline {3.1}R\IeC {\'o}\IeC {\.z}nice w stosunku do pierwowzoru}{7}
-\contentsline {section}{\numberline {3.2}Inne projekty wykorzystuj\IeC {\k a}ce podobne rozwi\IeC {\k a}zania}{7}
-\contentsline {chapter}{\numberline {4}Testowe modele manipulatora}{9}
-\contentsline {chapter}{\numberline {5}Struktura manipulatora docelowego}{11}
-\contentsline {section}{\numberline {5.1}Konfiguracje niedozwolone}{11}
-\contentsline {section}{\numberline {5.2}Kinematyka manipulatora}{11}
-\contentsline {subsection}{\numberline {5.2.1}Prosta kinematyka manipulatora}{11}
-\contentsline {subsection}{\numberline {5.2.2}Odwrotna kinematyka manipulatora}{11}
-\contentsline {chapter}{\numberline {6}Wyznaczenie wymiar\IeC {\'o}w manipulatora}{13}
-\contentsline {section}{\numberline {6.1}Obliczenie przestrzeni roboczej manipulatora}{13}
-\contentsline {subsection}{\numberline {6.1.1}Przestrze\IeC {\'n} robocza na bazie prostej kinematyki}{13}
-\contentsline {subsection}{\numberline {6.1.2}Przestrze\IeC {\'n} robocza na bazie odwrotnej kinematyki}{13}
-\contentsline {subsection}{\numberline {6.1.3}Obwiednia przestrzeni roboczej}{14}
-\contentsline {subsection}{\numberline {6.1.4}Wyznaczanie powierzchni przestrzeni roboczej}{14}
-\contentsline {section}{\numberline {6.2}Wyznaczenie wymiar\IeC {\'o}w manipulatora na podstawie przestrzeni roboczej}{14}
-\contentsline {subsection}{\numberline {6.2.1}Wyznaczenie wymiar\IeC {\'o}w pr\IeC {\'o}bnej wersji manipulatora}{14}
-\contentsline {subsection}{\numberline {6.2.2}Wyznaczenie wymiar\IeC {\'o}w ostatecznej wersji manipulatora}{15}
-\contentsline {chapter}{\numberline {7}Podsumowanie projektu}{19}
-\contentsline {chapter}{\numberline {A}Zawarto\IeC {\'s}\IeC {\'c} p\IeC {\l }yty CD}{21}
-\contentsline {chapter}{Bibliografia}{21}
+\contentsline {section}{\numberline {1.1}Manipulator r\IeC {\'o}wnoleg\IeC {\l }y}{3}
+\contentsline {section}{\numberline {1.2}Manipulator redundantny}{4}
+\contentsline {section}{\numberline {1.3}Manipulator planarny}{4}
+\contentsline {section}{\numberline {1.4}Manipulator podatny}{4}
+\contentsline {chapter}{\numberline {2}Cele projektu}{7}
+\contentsline {section}{\numberline {2.1}Aspekt in\IeC {\.z}ynierski}{7}
+\contentsline {section}{\numberline {2.2}Aspekt badawczy}{7}
+\contentsline {chapter}{\numberline {3}Pierwowz\IeC {\'o}r}{9}
+\contentsline {section}{\numberline {3.1}R\IeC {\'o}\IeC {\.z}nice w stosunku do pierwowzoru}{9}
+\contentsline {section}{\numberline {3.2}Inne projekty wykorzystuj\IeC {\k a}ce podobne rozwi\IeC {\k a}zania}{9}
+\contentsline {section}{\numberline {3.3}Testowe modele manipulatora}{11}
+\contentsline {chapter}{\numberline {4}Struktura manipulatora docelowego}{15}
+\contentsline {section}{\numberline {4.1}Konstrukcja manipulatora}{15}
+\contentsline {section}{\numberline {4.2}Konfiguracje niedozwolone}{15}
+\contentsline {section}{\numberline {4.3}Kinematyka manipulatora}{16}
+\contentsline {subsection}{\numberline {4.3.1}Prosta kinematyka manipulatora}{16}
+\contentsline {subsection}{\numberline {4.3.2}Odwrotna kinematyka manipulatora}{16}
+\contentsline {section}{\numberline {4.4}Dynamika manipulatora}{17}
+\contentsline {chapter}{\numberline {5}Wyznaczenie wymiar\IeC {\'o}w manipulatora}{19}
+\contentsline {section}{\numberline {5.1}Obliczenie przestrzeni roboczej manipulatora}{19}
+\contentsline {subsection}{\numberline {5.1.1}Przestrze\IeC {\'n} robocza na bazie prostej kinematyki}{19}
+\contentsline {subsection}{\numberline {5.1.2}Przestrze\IeC {\'n} robocza na bazie odwrotnej kinematyki}{19}
+\contentsline {subsection}{\numberline {5.1.3}Obwiednia przestrzeni roboczej}{20}
+\contentsline {subsection}{\numberline {5.1.4}Wyznaczanie powierzchni przestrzeni roboczej}{20}
+\contentsline {section}{\numberline {5.2}Wyznaczenie wymiar\IeC {\'o}w manipulatora na podstawie przestrzeni roboczej}{20}
+\contentsline {subsection}{\numberline {5.2.1}Wyznaczenie wymiar\IeC {\'o}w pr\IeC {\'o}bnej wersji manipulatora}{20}
+\contentsline {subsection}{\numberline {5.2.2}Wyznaczenie wymiar\IeC {\'o}w ostatecznej wersji manipulatora}{21}
+\contentsline {chapter}{\numberline {6}Pomiar si\IeC {\l }y}{25}
+\contentsline {section}{\numberline {6.1}Rozk\IeC {\l }ad si\IeC {\l }}{25}
+\contentsline {section}{\numberline {6.2}Pomiar pr\IeC {\k a}du silnik\IeC {\'o}w}{25}
+\contentsline {section}{\numberline {6.3}Tensometry}{25}
+\contentsline {subsection}{\numberline {6.3.1}Uk\IeC {\l }ad pomiarowy}{26}
+\contentsline {subsection}{\numberline {6.3.2}Testy}{27}
+\contentsline {subsection}{\numberline {6.3.3}Umieszczenie czujnik\IeC {\'o}w na konstrukcji manipulatora}{27}
+\contentsline {chapter}{Bibliografia}{27}
