@@ -84,10 +84,21 @@ Z roku na rok rośnie liczba robotów, które są w stanie zastąpić człowieka
 coraz częściej spotyka się operacje, w których ludzie i roboty współpracują ze sobą. Wiąże się to ze zwiększonymi wymogami bezpieczeństwa, 
 ponieważ człowiek ze względu na delikatną budowę jest narażony na mechaniczne uszkodzenia ciała. Jednym z rozwiązań
 zapewniających bezinwazyjną pracę robota jest wykorzystanie struktury równoległej i redundantnej, co pozwala kontrolować siły, którymi
-robot oddziałuje na otaczające go obiekty. W przypadku pojawienia się w przestrzeni roboczej małych i lekkich obiektów robot
-jest w stanie je przesunąć używając nieznacznie większej siły, podczas gdy cięższe przeszkody prowadzą do modyfikacji
-konfiguracji bądź też całej trasy manipulatora. W związku z tym pojawienie się człowieka w położeniu kolidującym z trajektorią ruchu
+robot oddziałuje na otaczające go obiekty. W związku z tym pojawienie się człowieka w położeniu kolidującym z trajektorią ruchu
 robota nie spowoduje znaczącego wzrostu pojawiających się sił, a co więcej wymusi generację nowej bezkolizyjnej ścieżki jeśli to będzie możliwe.
+
+W przypadku pojawienia się w przestrzeni roboczej małych i lekkich obiektów robot
+jest w stanie je przesunąć używając nieznacznie większej siły, podczas gdy cięższe przeszkody prowadzą do modyfikacji
+konfiguracji bądź też całej trasy manipulatora. Zastosowanie kontroli siły w sterowniku manipulatora umożliwia bezzwłoczne reagowanie
+na niespodziewane przeszkody, ale także na celowe oddziaływanie z zadaną siłą na otoczenie. Rozwiązanie to znajduje zastosowanie
+w operacjach, gdzie samo pozycjonowanie nie jest wystarczające. Do takich sytuacji należą przykładowo:
+\begin{itemize}
+\item chwytanie obiektów miękkich i kruchych,
+\item przesuwanie obiektów,
+\item rozciąganie obiektów,
+\item prasowanie,
+\item mycie okien.
+\end{itemize}
 
 W niniejszej pracy magisterskiej podjęta zostanie próba zaprojektowania i skonstruowania takiego robota, który
 będzie w stanie nieinwazyjnie koegzystować z obiektami znajdującymi się w jego otoczeniu. Struktura kinematyczna
@@ -98,36 +109,49 @@ cechom, które taki robot powinien posiadać.
 Roboty o strukturach równoległych definiuje się jako roboty, w których platforma ruchoma, tzn. sprzęg efektora, jest połączona
 z podstawą -- platformą więcej niż jednym łańcuchem kinematycznym, tworząc zamknięty łańcuch kinematyczny \cite{honczarenko}.
 Budowa taka ma szereg istotnych zalet w stosunku do konstrukcji konwencjonalnych -- osie napędowe manipulatora
-mogą być umieszczone u jego podstawie, dzięki czemu znacząco zredukowana jest masa części ruchomej. Umożliwia to precyzyjniejsze sterowanie,
+mogą być umieszczone przy jego podstawie, dzięki czemu znacząco zredukowana jest masa części ruchomej. Umożliwia to precyzyjniejsze sterowanie,
 a także uzyskiwanie większych przyspieszeń ze względu na zmniejszoną bezwładność. Ponadto siły zewnętrzne działające na efektor
 nie są przenoszone przez szeregowy łańcuch elementów, lecz rozłożone na równoległe ramiona, co wpływa na dużą sztywność struktury układu.
-Stosunek masy do sztywności układu ulega znaczącej poprawie.
+Stosunek masy do sztywności układu ulega znaczącej poprawie, co w sposób bezpośredni przekłada się na dokładność pozycjonowania.
+Przy projektowaniu manipulatora dążymy do minimalizacji jego masy, ponieważ cięższe roboty wymagają większych nakładów
+energetycznych przy poruszaniu się, a także wykazują gorsze parametry bezwładnościowe. Z drugiej strony większa masa sprzyja większej sztywności,
+co przekłada się na mniejsze ugięcia ogniw przy oddziaływaniu zewnętrznych sił. Ma to bezpośredni wpływ na dokładność pozycjonowania, 
+ponieważ sztywniejszy układ oznacza mniejszy błąd przy przeciwdziałaniu zewnętrznej sile.
 
-Z drugiej strony wprowadzenie równoległej struktury znacząco zwiększa złożoność równań opisujących prostą i odwrotną kinematykę robota.
-Ponadto, ograniczeniu ulega przestrzeń robocza, która może być dużo mniejsza niż gabaryty manipulatora. Równoległość niesie za sobą
-także pojawianie się konfiguracji osobliwych, które komplikują sterowanie robotem i wymagają stosowania odpowiednich ograniczeń.
-W strukturach równoległych występują też możliwe kolizje pomiędzy ramionami, a efektorem robota, co należy uwzględnić przy
+Z drugiej strony wprowadzenie równoległej struktury znacząco zwiększa złożoność równań opisujących prostą i odwrotną kinematykę, a także
+dynamikę robota.
+Ponadto, ograniczeniu ulega przestrzeń robocza, która może być dużo mniejsza niż gabaryty manipulatora. 
+W stosunku do manipulatorów szeregowych równoległość zwiększa liczbę konfiguracji osobliwych, 
+które komplikują sterowanie robotem i wymagają stosowania odpowiednich ograniczeń.
+W strukturach równoległych częściej występują też potencjalne kolizje pomiędzy ramionami, a efektorem robota, co należy uwzględnić przy
 definiowaniu dopuszczalnego zakresu ruchu.
 
 Najczęściej spotyka się roboty równoległe o trzech lub nawet sześciu ramionach \cite{honczarenko}. Mimo dużej liczby napędów uzyskuje
 się w nich dość niewielką liczbę stopni swobody. Ich największą zaletą jest to, że silniki i przekładnie są zamocowane
 na nieruchomej podstawie (co więcej poza przestrzenią roboczą), przez co nie obciążają członów ruchomych i nie pogarszają w ten sposób
-właściwości dynamicznych robota. Podobnie sytuacja wygląda w manipulatorze stworzonym w ramach tego projektu, jednakże zastosowane
-zostały dwa ramiona.
+właściwości dynamicznych robota. 
+
 
 \section{Manipulator redundantny} \label{sec:redundantny}
 Manipulator redundantny (nadmiarowy) składa się z większej liczby przegubów niż jest ona wymagana do wykonania konkretnego zadania. 
 Cecha ta zapewnia to robotowi większą zręczność, która pozwala na skuteczne omijanie osobliwości, ograniczeń przegubów czy
 przeszkód pojawiających się w przestrzeni roboczej \cite{handbook}. Wpływa to korzystnie na rozmiar samej przestrzeni roboczej,
-ponieważ liczba osiągalnych konfiguracji ulega zwiększeniu. Co więcej, zmniejszone są także energia i momenty w przegubach,
-co wpływa na poprawę dynamicznych osiągów robota. Dla manipulatorów redundantnych komplikacji ulega zadanie odwrotnej kinematyki, ponieważ istnieje nieskończona liczba jej rozwiązań. W związku z tym definiuje się kryteria doboru konfiguracji, tak aby obliczone położenia przegubów były optymalne. 
+ponieważ liczba osiągalnych konfiguracji ulega zwiększeniu. Co więcej, zdolność realizacji pojedynczej konfiguracji na wiele sposobów
+umożliwia stosowanie optymalizacji dla tego samego położenia w przestrzeni zewnętrznej w oparciu o przyjęte kryteria. Pojedyncze
+konfiguracje składają się na całe trajektorie, w związku z czym możliwa jest optymalizacja ścieżki i trajektorii robota.
+Wiąże się to ze zmniejszonymi momentami i energią w przegubach,
+co wpływa na poprawę dynamicznych osiągów robota. Dla manipulatorów redundantnych komplikacji ulega zadanie odwrotnej kinematyki, 
+ponieważ istnieje nieskończona liczba jej rozwiązań. W związku z tym definiuje się kryteria doboru konfiguracji, 
+tak aby obliczone położenia przegubów były optymalne. 
 
 
 \section{Manipulator planarny}
 Planarność, jako cecha manipulatora, oznacza, że porusza się on jedynie na płaszczyźnie, a nie w przestrzeni trójwymiarowej.
 Położenie efektora opisuje się za pomocą współrzędnych położenia X i Y oraz orientacji $\theta$. Takie ograniczenie znacząco redukuje 
 stopień złożoności ruchu robota, a w konsekwencji równania opisujące jego ruch. Przy konstruowaniu manipulatorów
-planarnych istotna jest redukcja masy ruchomych elementów, ponieważ nie posiadają one napędów redukujących wpływ siły grawitacji.
+planarnych istotna jest redukcja masy ruchomych elementów. Dobranie odpowiedniej orientacji robota w przestrzeni może
+(niecałkowicie) wyeliminować wpływ przyciągania ziemskiego na dynamikę, ponieważ napędy będą poruszać elementami prostopadle do siły grawitacji
+(obciążenie rozłoży się na napędy i łożyska).
 
 \section{Manipulator podatny}
 Podatność \cite{handbook} definiowana jest jako możliwość kontroli sił, którymi robot oddziałuje
@@ -138,8 +162,26 @@ rozwiązany poprzez wprowadzenie równoległego sterowania siłą, które umożl
 na otoczenie. Kontrolowanie siły efektora znajduje swoje zastosowanie zarówno przy zatrzymywaniu ruchu robota w kontakcie z
 obiektami sztywnymi, jak i zręcznym manipulowaniu obiektami miękkimi (np. chwytanie gąbki).
 
-Popularnym podejściem do sterowania manipulatora w kontakcie z nie w pełni znanym środowiskiem jest wykorzystanie hybrydowego
-połączenia sterowania przyspieszeniem i siłą. Kontrolowanie samej siły nie zapewnia odpowiednich właściwości dynamicznych ruchu
+Istnieje cały szereg metod realizacji sterowania siłowego. Jednym z nich jest podatność pasywna, która cechuje się
+szczególną budową manipulatora. Zapewnienie strukturalnej podatności odbywa się za pomocą podatnych ogniw, przegubów, efektora
+czy też podatnych serwomechanizmów, służących do pozycjonowania. Jednym z przykładów jest zastosowanie
+równoległej budowy robota. Podatność pasywna charakteryzuje się dużą prostotą i niskim nakładem kosztów, ze względu na
+brak stosowania elektroniki -- czujników i sterowników. Mimo wszystko jest to rozwiązanie mało efektywne -- niemożliwa jest
+szybka rekonfiguracja manipulatora. Ponadto, radzi sobie ono jedynie z niewielkimi niedokładnościami orientacji i pozycjonowania robota.
+Przy większych zaburzeniach nie jesteśmy w stanie jednoznacznie stwierdzić czy pojawiły się duże siły zewnętrzne.
+
+Podatność aktywna manipulatora wynika najczęściej z zastosowanego układu sterowania. Wykorzystując sygnały z
+różnego rodzaju czujników kontroler otrzymuje informacje na temat sił oddziałujących z zewnątrz na manipulator, dzięki
+czemu może on modyfikować trajektorię w czasie rzeczywistym. Ten rodzaj podatności jest bardziej skomplikowany,
+co implikuje większe koszta i wolniejsze działanie. Z drugiej strony aktywna podatność oferuje pełną kontrolę nad
+realizowaną trajektorią, co zwiększa dokładność i powtarzalność sterowania. Ze względu na niedostatecznie szybką reakcję
+na zaburzenia, często do aktywnej podatności dodaje się elementy podatności pasywnej.
+
+Strategie aktywnego kontrolowania interakcji dzieli się na dwie kategorie -- niebezpośrednie i pośrednie.
+Pierwsze z nich, do którego należy kontrola impedancji, nie opiera się na bezpośrednim sprzężeniu zwrotnym od siły, a na analizie ruchu
+i reakcjach robota na zaburzenia w zaplanowanej trajektorii. Kontrolowanie pośrednie opiera się na pełnym modelu zadania interakcji
+i wymaga pełnej informacji zwrotnej. Popularnym i często stosowanym pośrednim podejściem do sterowania manipulatora w kontakcie z nie w pełni znanym środowiskiem jest wykorzystanie hybrydowego połączenia sterowania przyspieszeniem i siłą. 
+Kontrolowanie samej siły nie zapewnia odpowiednich właściwości dynamicznych ruchu
 robota, podczas gdy bez sterowanie przyspieszeniem w kontakcie z przeszkodami prowadzi do błędów wspomnianych wcześniej. 
 O ile zastosowanie obu sterowań równolegle jest dość skomplikowane, stosuje się pewne uproszczenia pozwalające zdekomponować
 problem na dwa części. Możliwe jest rozdzielenie stopni swobody robota na pracę w domenie sił i przyspieszeń w taki sposób,
@@ -191,8 +233,7 @@ Tu będzie dalszy tekst, gdy zacznę prace nad tym etapem.
 
 
 \chapter{Pierwowzór} \label{ch:pierwowzor}
-Pomysł na stworzenie planarnego manipulatora zrodził się po przeczytaniu artykułu naukowego
-"Hybrid position/force control of a flexible parallel manipulator" \cite{wzor}. 
+Pomysł na stworzenie planarnego manipulatora wywodzi się z \cite{wzor}. 
 Autorzy tego artykułu podjęli się stworzenia równoległego manipulatora, którego cechą charakterystyczną
 jest elastyczna końcówka umożliwiająca pomiary sił/momentów działających na efektor. 
 Jak widzimy na rysunku \ref{rys:pierwowzor_zdjecie}, do pomiaru siły został wykorzystany czujnik sił/momentów
@@ -251,7 +292,7 @@ Dynamikę i sterowanie manipulatora redundantnego można znaleźć w pracy \cite
 są strategie sterowania pozycją i siłą, stosowane naprzemiennie. Zdefiniowane są krytyczne kąty przegubów, przy których następuje zmiana
 strategii. W raporcie tym znajdują się badania porównujące jakość pozycjonowania efektora dla redundantnej i nieredundantnej wersji manipulatora.
 Na podstawie przeprowadzonych eksperymentów autorzy stwierdzają, że błędy w obu przypadkach są do siebie zbliżone. Istotnym wnioskiem jest
-fakt, że wprowadzenie redundacji nie wpływa na jakość pozycjonowania, a jednocześnie zwiększa możliwości sztywność i możliwości manipulacyjne robota.
+fakt, że wprowadzenie redundacji nie wpływa na jakość pozycjonowania, a jednocześnie zwiększa sztywność i możliwości manipulacyjne robota.
 
 \section{Testowe modele manipulatora}
 Przed pojawieniem się finalnej wersji manipulatora rozważane były różne warianty, a projekt ewoluował od pierwowzoru \ref{rys:pierwowzor_model}
@@ -266,9 +307,48 @@ testach, głównie ze względu na wady opisane w sekcji \ref{sec:roznice_do_pier
 
 Model kolejnego rozpatrywanego wariantu znajduje się na rysunku \ref{rys:testowa_wersja_model}. W stosunku do pierwowzoru pojawił
 się jeden dodatkowy przegub, który zapewnił redundancję manipulatora. Ponadto efektorem jest sztywna część (w pierwowzorze była elastyczna),
-co całkowicie zmienia sposób sterowania i wykorzystania czujników siły. Kinematyka prosta, polegająca
+co całkowicie zmienia sposób sterowania i wykorzystania czujników siły. 
+Wyznaczenie kinematyki prostej, polegające
 na obliczaniu pozycji efektora ($x_e, y_e, \theta_e$) na podstawie położeń przegubów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$)
-znajduje się w równaniach \ref{eq:testowa_kinematyka_prosta} i \ref{eq:testowa_kinematyka_prosta2}.
+zostało oparte o rysunek \ref{rys:schemat_probny}. Punkty $(x_a, y_a)$ oraz $(x_b, y_b)$ reprezentują zakończenia pierwszych
+dwóch ramion (odpowiednio prawego i lewego), tworzących dwuwahadło.
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.6\textwidth]{grafika/schemat_probny}
+  \caption{Schemat próbnego manipulatora}
+  \label{rys:schemat_probny}  
+\end{figure}
+
+Przy liczeniu kinematyki tego manipulatora należy wziąć pod uwagę kilka założeń dotyczących modelu -- takich jak stały kąt $\beta$.
+Wynika on ze sztywnego połączenia ogniwa efektora z ostatnim ogniwem lewego ramienia, a jego wartość została ustalona na $\beta = \frac{2}{3}\pi$.
+
+Na podstawie kątów przegubów napędzanych, niezależnie dla lewego i prawego ramienia obliczane są położenia końców drugich ramion
+($l_0$ jest odległością początków każdego z ramion od punktu (0,0)):
+\begin{equation}
+\begin{cases}
+x_a = l_0 + l_1\cos q_{a1} + l_2 \cos(q_{a1}+q_{a2}),\\
+x_b = -l_0 + l_1\cos q_{b1} + l_2 \cos(q_{b1}+q_{b2}),\\
+y_a = l_1\sin q_{a1} + l_2 \sin(q_{a1}+q_{a2}),\\
+y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}),\\
+\beta = \frac{2}{3}\pi.
+\end{cases}
+\label{eq:testowa_kinematyka_prosta2}
+\end{equation}
+
+Korzystając z twierdzenia cosinusów wyznaczamy kąt $\delta$, a w konsekwencji punkt łączenia ramion $(x_s, y_s)$:
+\begin{equation}
+\begin{cases}
+\alpha = \arctan(\frac{y_a-y_b}{x_a-x_b}),\\
+\delta = \arccos(\frac{d}{2l_3}),\\
+x_s = x_b + l_3\cos(\delta + \alpha),\\
+y_s = y_b + l_3\sin(\delta + \alpha).
+\end{cases}
+\label{eq:testowa_kinematyka_prosta3}
+\end{equation}
+
+W oparciu o ten punkt, a także kąty $\beta$ i $\delta$ wyznaczamy położenie i orientację efektora.
+znajduje się w równaniach (\ref{eq:testowa_kinematyka_prosta}) i (\ref{eq:testowa_kinematyka_prosta2}).
+
 \begin{equation}
 \begin{cases}
 x_e = l_4\cos\theta_e - \sin(\arctan(\frac{y_a-y_b}{x_a-x_b}))\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + \frac{1}{2}(x_a+x_b),\\
@@ -290,8 +370,24 @@ y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}),\\
 \end{equation}
 
 Stała wartość $\beta$ oznacza kąt pomiędzy ostatnim ogniwem lewego ramienia, a ogniwem efektora. W modelu na rysunku \ref{rys:testowa_wersja_model},
-a także we wszystkich symulacjach wynosi on 120 stopni. Punkty $(x_a, y_a)$ oraz $(x_b, y_b)$ reprezentują zakończenia pierwszych
-dwóch ramion (odpowiednio prawego i lewego), tworzących dwuwahadło.
+a także we wszystkich symulacjach wynosi on 120 stopni. 
+
+Wyprowadzenie kinematyki prostej na podstawie rysunku \ref{rys:schemat_probny} rozpoczyna się od wyznaczenia położeń punktów
+$(x_a, y_a)$ oraz $(x_b, y_b)$ względem punktu (0,0) z wykorzystaniem sinusów i kosinusów sterowanych kątów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$).
+Przy obliczeniach należy uwzględnić odległość mocowań ramion od początku układu współrzędnych, wynoszącą L. 
+Gotowe wzory zawiera równanie \ref{eq:testowa_kinematyka_prosta2}. Dalsze kalkulacje (\ref{eq:testowa_kinematyka_prosta})
+oparte są o te dwa punktu. 
+
+Kolejnym krokiem jest poprowadzenie odcinka pomiędzy punktami $(x_a, y_a)$ oraz $(x_b, y_b)$. Powstanie w ten sposób
+trójkąt równoramienny, którego wysokość łączy się z poprowadzonym odcinkiem w jego środku pod kątem prostym.
+Po wyznaczeniu położenia tego punktu, korzystając z kąta $\alpha$ i wysokości trójkąta obliczane są współrzędne punktu łączącego oba ramiona.
+Znając jego współrzędne, a także położenie $(x_b, y_b)$, arcus tangens pozwala wyznaczyć kąt $\delta$. 
+Posiadając wartości $\delta$ i $\beta$ kąt $\theta_e$ obliczany jest ze wzoru (\ref{eq:theta_probna}).
+\begin{equation}
+\theta_e = \frac{3}{2}\pi-\beta-\delta.
+\label{eq:theta_probna}
+\end{equation}
+Na koniec wyznaczany jest punkt $(x_e, y_e)$ na podstawie kąta $\theta_e$, długości $L_4$ oraz punktu łączącego ramiona.
 
 Zadaniem kinematyki odwrotnej jest wyznaczenie położeń przegubów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$) przy znanej pozycji efektora
 ($x_e, y_e, \theta_e$). Równania \ref{eq:testowa_kinematyka_odwrotna} i \ref{eq:testowa_kinematyka_odwrotna2} zawierają te przekształcenia.
@@ -323,11 +419,19 @@ Kąt $\gamma$ podlega optymalizacji w trakcie procesu liczenia odwrotnej kinemat
 rozkładu sił działających na efektor na obydwa ramiona. Ze względu na pominięcie analizy sił dla testowej wersji manipulatora, można
 przyjąć go jako wartość stałą.
 
+Odwrotną kinematykę wyznacza się zaczynając od końca i postępując wstecz. W pierwszym etapie, na podstawie sinusa i kosinusa kąta
+$\theta_e$ oraz punktu $(x_e, y_e)$ obliczane jest położenie punktu łączącego oba ramiona. W kroku kolejnym, 
+wyznaczany jest kąt $\delta$ analogicznie do wzoru (\ref{eq:theta_probna}), a także nachylenie prawego ogniwa $l_3$ w globalnym
+układzie współrzędnych jako różnicę $\gamma - \theta_e$. Na podstawie tych dwóch kątów, a także położenia punktu złączenia ramion
+otrzymywane są położenia $(x_a, y_a)$ i $(x_b, y_b)$ (\ref{eq:testowa_kinematyka_odwrotna2}). Kąty napędów ($q_{a1}, q_{a2}$) oraz ($q_{b1}, q_{b2}$)
+wyznaczane są niezależnie według standardowych procedur liczenia kinematyki odwrotnej dwuwahadła, uwzględniając odcinek $l_0$.
+
+
 Dla takiego manipulatora zostały przeprowadzone badania wielkości jego przestrzeni roboczej, jej kształtu i wpływu na rozmiar robota.
 Znajdują się one w rozdziale \ref{sec:wymiary_probnej_wersji}. 
-Sztywne połączenie pomiędzy efektorem, a jednym z ramion sprawia, że manipulator nie jest symetryczny względem ramion. Jest to bardzo
-istotna i pożądana cecha, ponieważ zapewnia ona równomierny rozkład sił działających na efektor w obu ramionach manipulatora
-(jego przegubach i silnikach). Symetryczny rozkład sił umożliwia precyzyjniejszy ich pomiar, co jest jednym z założeń projektu. 
+Sztywne połączenie pomiędzy efektorem, a jednym z ramion sprawia, że manipulator nie jest symetryczny względem ramion. 
+Prowadzi to do nierównomiernego rozkładu sił działających na efektor w obu ramionach robota (jego przegubach i silnikach).
+Symetryczny rozkład sił umożliwia precyzyjniejszy ich pomiar, co jest jednym z założeń projektu. 
 W związku z tym ten wariant projektu został odrzucony, a w kolejnej wersji manipulator został wzbogacony o opisywaną symetrię. 
 Ponadto wyeliminowanie wspomnianego sztywnego połączenia zwiększyło powierzchnię jego przestrzeni roboczej, co bezpośrednio przełożyło
 się na poprawę możliwości manipulacyjnych.
@@ -372,7 +476,7 @@ znajdującej się w rozdziale \ref{sec:ograniczenia_katow}.
 \section{Kinematyka manipulatora}
 Efektorem (chwytakiem) nazywa się zakończenie konstrukcji manipulatora, które często posiada możliwość wymiany bądź modyfikacji. 
 Dzięki temu jeden robot może sekwencyjnie wykonywać kilka różniących się od siebie operacji. Pod pojęciem kinematyki kryje się
-funkcja odwzorowująca przestrzeń stanu Q w orientację i położenie efektora $E_e$ \cite{podstawy_robotyki}.
+funkcja odwzorowująca przestrzeń stanu Q w orientację i położenie efektora \cite{podstawy_robotyki}.
 Znajomość kinematyki umożliwia manipulowanie robotem, ponieważ algorytm sterowania
 jest w stanie obliczyć jego aktualną konfigurację i przewidzieć zmiany, które nastąpią po aktualizacji pozycji napędów.
 
@@ -383,18 +487,47 @@ Ze względu na planarność konstruowanego manipulatora wyznaczenie kinematyki s
 orientacji $\theta_e$, gdyż
 ruch robota odbywa się na płaszczyźnie i wartość współrzędnej Z (prostopadłej do płaszczyzny XY) jest stała.
 
-Prostą kinematykę zaprojektowanego manipulatora zawiera równanie \ref{eq:prosta_kinematyka}.
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.6\textwidth]{grafika/schemat_docelowy}
+  \caption{Schemat docelowego manipulatora}
+  \label{rys:schemat_docelowy}  
+\end{figure}
+
+
+Prostą kinematykę zaprojektowanego manipulatora zawierają równania \ref{eq:kinematyka_prosta} i \ref{eq:kinematyka_prosta2}.
+Wykorzystane oznaczenia znajdują swoją reprezentację na schemacie \ref{rys:schemat_docelowy}.
+W wyniku wprowadzenia symetryczności równania uległy uproszczeniu w stosunku do kinematyki testowej wersji robota (\ref{eq:testowa_kinematyka_prosta}, \ref{eq:testowa_kinematyka_prosta2}).
 \begin{equation}
 \begin{cases}
-x = ,\\
-y = ,\\
-\theta = .
+x_e = \cos\theta_e(\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + l_4) + \frac{1}{2}(x_a+x_b),\\
+y_e = \sin\theta_e(\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + l_4) + \frac{1}{2}(y_a+y_b),\\
+\theta_e = \pi + \arctan(\frac{y_a-y_b}{x_a-x_b}),
 \end{cases}
-\label{eq:prosta_kinematyka}
+\label{eq:kinematyka_prosta}
+\end{equation}
+gdzie
+\begin{equation}
+\begin{cases}
+x_a = L + l_1\cos q_{a1} + l_2 \cos(q_{a1}+q_{a2}),\\
+x_b = -L + l_1\cos q_{b1} + l_2 \cos(q_{b1}+q_{b2}),\\
+y_a = l_1\sin q_{a1} + l_2 \sin(q_{a1}+q_{a2}),\\
+y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}).
+\end{cases}
+\label{eq:kinematyka_prosta2}
 \end{equation}
 
+Wyprowadzenie kinematyki prostej ponownie rozpoczyna się od wyznaczenia punktów $(x_a, y_a)$ oraz $(x_b, y_b)$ na podstawie
+sinusów i kosinusów przegubów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$), a także odległości $l_0$ (\ref{eq:kinematyka_prosta2}).
+Orientacja manipulatora $\theta_e$ definiowana jest jako kąt $\alpha$, jednoznacznie określony przez położenia $(x_a, y_a)$ i $(x_b, y_b)$,
+powiększony o $\frac{\pi}{2}$.
+
+W celu znalezienia położenia efektora konieczne jest obliczenie odległości pomiędzy punktem łączącym oba ogniwa $l_3$, a
+środkiem odcinka $|(x_a, y_a)(x_b, y_b)|$
+Następnie prowadzony jest odcinek pomiędzy tymi punktami, który w połowie przecina się z prostą będącą przedłużeniem ramienia $l_4$.
+
 \subsection{Odwrotna kinematyka manipulatora}
-Odwrotna kinematyka służy do wyznaczania wartości kątów w napędach robota ($q_1, q_2, q_3, q_4$) na podstawie informacji o 
+Odwrotna kinematyka służy do wyznaczania wartości kątów w napędach robota ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$) na podstawie informacji o 
 położeniu i orientacji efektora. Jest to zadanie bardziej złożone niż kinematyka prosta, które w skrajnych przypadkach
 może nie mieć rozwiązania (w momencie, gdy zadane położenie efektora jest nieosiągalne bez naruszenia ograniczeń). 
 Ponadto, nawet jeśli istnieje rozwiązanie odwrotnej kinematyki, konfiguracja może być mimo wszystko nieosiągalna dla manipulatora
@@ -410,12 +543,22 @@ Tutaj powinno być coś o konkretnym kryterium, ale jeszcze muszę to przeanaliz
 
 \begin{equation}
 \begin{cases}
-q_1 = ,\\
-q_2 = ,\\
-q_3 = ,\\
-q_4 = .
+q_{a1} = \arctan(\frac{y_a}{x_a-L})-\arccos(\frac{l_1^2-l_2^2+(x_a-L)^2+y_a^2}{2l_1\sqrt{(x_a-L)^2+y_a^2}}),\\
+q_{a2} = \pi - \arccos(\frac{l_1^2+l_2^2-(x_a-L)^2-y_a^2}{2l_1l_2}),\\
+q_{b1} = \arctan(\frac{y_b}{x_b+L}) + \arccos(\frac{l_1^2-l_2^2+(x_b+L)^2+y_b^2}{2l_1\sqrt{(x_b+L)^2+y_b^2}}),\\
+q_{b2} = -\pi + \arccos(\frac{l_1^2+l_2^2-(x_b+L)^2-y_b^2}{2l_1l_2}),
 \end{cases}
-\label{eq:odwrotna_kinematyka}
+\label{eq:kinematyka_odwrotna}
+\end{equation}
+gdzie
+\begin{equation}
+\begin{cases}
+x_a = x_e + l_3\sin(\gamma + \theta_e - \frac{\pi}{2}) - l_4\cos(\theta_e),\\
+x_b = x_e - l_3\sin(\gamma - \theta_e + \frac{\pi}{2}) - l_4\cos(\theta_e),\\
+y_a = y_e - l_3\cos(\gamma + \theta_e - \frac{\pi}{2}) - l_4\sin(\theta_e),\\
+y_b = y_e - l_3\cos(\gamma - \theta_e + \frac{\pi}{2}) - l_4\sin(\theta_e).
+\end{cases}
+\label{eq:kinematyka_odwrotna2}
 \end{equation}
 
 \section{Dynamika manipulatora}
@@ -479,7 +622,7 @@ Odbywa się to poprzez przeliczenie odpowiednich komórek siatki na wartości X 
 późniejsze narysowanie przestrzeni. Przykład takiej obwiedni, wygenerowany z pomocą programu gnuplot
 został przedstawiony na rysunku \ref{rys:przestrzen_robocza}. 
 
-\subsection{Wyznaczanie powierzchni przestrzeni roboczej}
+\subsection{Wyznaczanie powierzchni przestrzeni roboczej} 
 Na podstawie obwiedni przestrzeni roboczej jesteśmy w stanie obliczyć jej powierzchnię. 
 Ze względu na ograniczenia numeryczne przyjęte wcześniej będzie to jedynie jej aproksymacja. 
 Dla każdej kolumny obliczamy liczbę komórek siatki pomiędzy wystąpieniem pierwszej i drugiej jedynki
@@ -488,9 +631,13 @@ roboczej. Dokładność otrzymanej w ten sposób powierzchni zależy w dużym st
 ziarnistości siatki. 
 
 \section{Wyznaczenie wymiarów manipulatora na podstawie przestrzeni roboczej}
-Posiadając możliwość obliczenia rozmiaru przestrzeni roboczej pojedynczej instancji 
-manipulatora jesteśmy w stanie porównać je i wybrać tą, która zapewni nam najlepsze
-warunki pracy. W tym celu definiujemy konkretną wartość jako sumę ramion (sama wartość nie jest istotna, gdyż
+Wzajemna relacja długości ogniw manipulatora ma ogromny wpływ na jego możliwości manipulacyjne. W związku z tym definiuje się
+zadanie optymalizacyjne, mające na celu wyznaczenie takiej konfiguracji długości ramion robota, która zapewnia największą
+wartość kryterium jakości. Za funkcję kryterialną, która podlega zadaniu maksymalizacji, przyjęta została powierzchnia 
+przestrzeni roboczej manipulatora.
+Posiadając możliwość obliczenia jej rozmiaru dla pojedynczej instancji 
+manipulatora jesteśmy w stanie porównać je i wybrać tą, która zapewni nam największą wartość funkcji kryterialnej.
+W tym celu definiujemy konkretną wartość jako sumę ramion (sama wartość nie jest istotna, gdyż
 interesuje nas wzajemny stosunek długości ramion). Następnie zmieniamy długość każdego z ogniw z odpowiednim krokiem
 i obliczamy rozmiar przestrzeni roboczej, zarówno prostą jak i odwrotną kinematyką. Oczywiście interesują nas tylko te
 konfiguracje, w których suma długości ramion nie przekracza zadanej sumy. Spośród wszystkich wygenerowanych kombinacji wybieramy tą,
@@ -591,7 +738,7 @@ zarówno wartości, jak i kierunków sił jest zadaniem złożonym i wymaga zast
 będą w stanie współpracować ze sobą i wzajemnie się uzupełniać. Najbardziej interesujące z punktu widzenia możliwych zastosowań
 są wektory sił działających na efektor manipulatora. Z drugiej strony umieszczanie czujników na efektorze robota nie jest dobrym pomysłem,
 ponieważ jest on najbardziej narażony na kontakt fizyczny, co mogłoby prowadzić do uszkodzeń mechanicznych czujników. Ponadto
-prowadzenie przewodów w pobliże efektora mogłoby niekorzystnie na jego zdolności manipulacyjne, a także ze względu na odległość zwiększyć
+prowadzenie przewodów w pobliżu efektora mogłoby niekorzystnie wpłynąć na jego zdolności manipulacyjne, a także ze względu na odległość zwiększyć
 szum pomiaru. W związku z tym do analizy sił zewnętrznych zdecydowano się zastosować tensometry \ref{sec:tensometry} umieszczone na 
 ramionach manipulatora, 
 a także pomiar poboru prądu silników \ref{sec:pomiar_pradu_silnikow}, który jest zależny od pojawiających się momentów. Wyznaczenie wpływu sił działających
