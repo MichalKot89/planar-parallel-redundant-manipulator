@@ -180,7 +180,8 @@ na zaburzenia, często do aktywnej podatności dodaje się elementy podatności 
 Strategie aktywnego kontrolowania interakcji dzieli się na dwie kategorie -- niebezpośrednie i pośrednie.
 Pierwsze z nich, do którego należy kontrola impedancji, nie opiera się na bezpośrednim sprzężeniu zwrotnym od siły, a na analizie ruchu
 i reakcjach robota na zaburzenia w zaplanowanej trajektorii. Kontrolowanie pośrednie opiera się na pełnym modelu zadania interakcji
-i wymaga pełnej informacji zwrotnej. Popularnym i często stosowanym pośrednim podejściem do sterowania manipulatora w kontakcie z nie w pełni znanym środowiskiem jest wykorzystanie hybrydowego połączenia sterowania przyspieszeniem i siłą. 
+i wymaga pełnej informacji zwrotnej. Popularnym i często stosowanym pośrednim podejściem do sterowania manipulatora w kontakcie z nie w 
+pełni znanym środowiskiem jest wykorzystanie hybrydowego połączenia sterowania przyspieszeniem i siłą. 
 Kontrolowanie samej siły nie zapewnia odpowiednich właściwości dynamicznych ruchu
 robota, podczas gdy bez sterowanie przyspieszeniem w kontakcie z przeszkodami prowadzi do błędów wspomnianych wcześniej. 
 O ile zastosowanie obu sterowań równolegle jest dość skomplikowane, stosuje się pewne uproszczenia pozwalające zdekomponować
@@ -308,10 +309,13 @@ testach, głównie ze względu na wady opisane w sekcji \ref{sec:roznice_do_pier
 Model kolejnego rozpatrywanego wariantu znajduje się na rysunku \ref{rys:testowa_wersja_model}. W stosunku do pierwowzoru pojawił
 się jeden dodatkowy przegub, który zapewnił redundancję manipulatora. Ponadto efektorem jest sztywna część (w pierwowzorze była elastyczna),
 co całkowicie zmienia sposób sterowania i wykorzystania czujników siły. 
+
+\subsection{Prosta kinematyka manipulatora}
 Wyznaczenie kinematyki prostej, polegające
 na obliczaniu pozycji efektora ($x_e, y_e, \theta_e$) na podstawie położeń przegubów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$)
 zostało oparte o rysunek \ref{rys:schemat_probny}. Punkty $(x_a, y_a)$ oraz $(x_b, y_b)$ reprezentują zakończenia pierwszych
-dwóch ramion (odpowiednio prawego i lewego), tworzących dwuwahadło.
+dwóch ramion (odpowiednio prawego i lewego), tworzących dwuwahadło. Wyprowadzenie prostej kinematyki zawierają równania 
+\ref{eq:testowa_kinematyka_prosta2} -- \ref{eq:testowa_kinematyka_prosta}.
 \begin{figure}[tp]
 \centering
   \includegraphics[width=0.6\textwidth]{grafika/schemat_probny}
@@ -329,8 +333,7 @@ Na podstawie kątów przegubów napędzanych, niezależnie dla lewego i prawego 
 x_a = l_0 + l_1\cos q_{a1} + l_2 \cos(q_{a1}+q_{a2}),\\
 x_b = -l_0 + l_1\cos q_{b1} + l_2 \cos(q_{b1}+q_{b2}),\\
 y_a = l_1\sin q_{a1} + l_2 \sin(q_{a1}+q_{a2}),\\
-y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}),\\
-\beta = \frac{2}{3}\pi.
+y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}).
 \end{cases}
 \label{eq:testowa_kinematyka_prosta2}
 \end{equation}
@@ -346,72 +349,21 @@ y_s = y_b + l_3\sin(\delta + \alpha).
 \label{eq:testowa_kinematyka_prosta3}
 \end{equation}
 
-W oparciu o ten punkt, a także kąty $\beta$ i $\delta$ wyznaczamy położenie i orientację efektora.
-znajduje się w równaniach (\ref{eq:testowa_kinematyka_prosta}) i (\ref{eq:testowa_kinematyka_prosta2}).
+W oparciu o ten punkt, a także kąty $\beta$ i $\delta$ wyznaczamy położenie i orientację efektora, które zawiera
+równanie (\ref{eq:testowa_kinematyka_prosta}).
 
 \begin{equation}
 \begin{cases}
-x_e = l_4\cos\theta_e - \sin(\arctan(\frac{y_a-y_b}{x_a-x_b}))\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + \frac{1}{2}(x_a+x_b),\\
-y_e = l_4\sin\theta_e + \cos(\arctan(\frac{y_a-y_b}{x_a-x_b}))\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + \frac{1}{2}(y_a+y_b),\\
-\theta_e = \frac{3}{2}\pi - \beta - \arctan(\frac{- \sin(\arctan(\frac{y_a-y_b}{x_a-x_b}))\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + \frac{1}{2}(x_a-x_b)}{\cos(\arctan(\frac{y_a-y_b}{x_a-x_b}))\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + \frac{1}{2}(y_a-y_b)}) ,
+x_e = x_s + l_4\cos\theta_e\\
+y_e = y_s + l_4\sin\theta_e,\\
+\theta_e = \frac{3}{2}\pi - \beta - \varphi = \pi - \beta + \delta + \alpha.
 \end{cases}
 \label{eq:testowa_kinematyka_prosta}
 \end{equation}
-gdzie
-\begin{equation}
-\begin{cases}
-x_a = L + l_1\cos q_{a1} + l_2 \cos(q_{a1}+q_{a2}),\\
-x_b = -L + l_1\cos q_{b1} + l_2 \cos(q_{b1}+q_{b2}),\\
-y_a = l_1\sin q_{a1} + l_2 \sin(q_{a1}+q_{a2}),\\
-y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}),\\
-\beta = \frac{2}{3}\pi.
-\end{cases}
-\label{eq:testowa_kinematyka_prosta2}
-\end{equation}
 
-Stała wartość $\beta$ oznacza kąt pomiędzy ostatnim ogniwem lewego ramienia, a ogniwem efektora. W modelu na rysunku \ref{rys:testowa_wersja_model},
-a także we wszystkich symulacjach wynosi on 120 stopni. 
-
-Wyprowadzenie kinematyki prostej na podstawie rysunku \ref{rys:schemat_probny} rozpoczyna się od wyznaczenia położeń punktów
-$(x_a, y_a)$ oraz $(x_b, y_b)$ względem punktu (0,0) z wykorzystaniem sinusów i kosinusów sterowanych kątów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$).
-Przy obliczeniach należy uwzględnić odległość mocowań ramion od początku układu współrzędnych, wynoszącą L. 
-Gotowe wzory zawiera równanie \ref{eq:testowa_kinematyka_prosta2}. Dalsze kalkulacje (\ref{eq:testowa_kinematyka_prosta})
-oparte są o te dwa punktu. 
-
-Kolejnym krokiem jest poprowadzenie odcinka pomiędzy punktami $(x_a, y_a)$ oraz $(x_b, y_b)$. Powstanie w ten sposób
-trójkąt równoramienny, którego wysokość łączy się z poprowadzonym odcinkiem w jego środku pod kątem prostym.
-Po wyznaczeniu położenia tego punktu, korzystając z kąta $\alpha$ i wysokości trójkąta obliczane są współrzędne punktu łączącego oba ramiona.
-Znając jego współrzędne, a także położenie $(x_b, y_b)$, arcus tangens pozwala wyznaczyć kąt $\delta$. 
-Posiadając wartości $\delta$ i $\beta$ kąt $\theta_e$ obliczany jest ze wzoru (\ref{eq:theta_probna}).
-\begin{equation}
-\theta_e = \frac{3}{2}\pi-\beta-\delta.
-\label{eq:theta_probna}
-\end{equation}
-Na koniec wyznaczany jest punkt $(x_e, y_e)$ na podstawie kąta $\theta_e$, długości $L_4$ oraz punktu łączącego ramiona.
-
+\subsection{Odwrotna kinematyka manipulatora}
 Zadaniem kinematyki odwrotnej jest wyznaczenie położeń przegubów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$) przy znanej pozycji efektora
-($x_e, y_e, \theta_e$). Równania \ref{eq:testowa_kinematyka_odwrotna} i \ref{eq:testowa_kinematyka_odwrotna2} zawierają te przekształcenia.
-
-\begin{equation}
-\begin{cases}
-q_{a1} = \arctan(\frac{y_a}{x_a-L})-\arccos(\frac{l_1^2-l_2^2+(x_a-L)^2+y_a^2}{2l_1\sqrt{(x_a-L)^2+y_a^2}}),\\
-q_{a2} = \pi - \arccos(\frac{l_1^2+l_2^2-(x_a-L)^2-y_a^2}{2l_1l_2}),\\
-q_{b1} = \arctan(\frac{y_b}{x_b+L}) + \arccos(\frac{l_1^2-l_2^2+(x_b+L)^2+y_b^2}{2l_1\sqrt{(x_b+L)^2+y_b^2}}),\\
-q_{b2} = -\pi + \arccos(\frac{l_1^2+l_2^2-(x_b+L)^2-y_b^2}{2l_1l_2}),
-\end{cases}
-\label{eq:testowa_kinematyka_odwrotna}
-\end{equation}
-gdzie
-\begin{equation}
-\begin{cases}
-x_a = x_e + l_3\cos(\gamma - \theta_e) - l_4\cos(\theta_e),\\
-x_b = x_e - l_3\sin(\frac{3}{2}\pi - \beta - \theta_e) - l_4\cos(\theta_e),\\
-y_a = y_e - l_3\sin(\gamma - \theta_e) - l_4\sin(\theta_e),\\
-y_b = y_e - l_3\cos(\frac{3}{2}\pi - \beta - \theta_e) - l_4\sin(\theta_e),\\
-\beta = \frac{2}{3}\pi.
-\end{cases}
-\label{eq:testowa_kinematyka_odwrotna2}
-\end{equation}
+($x_e, y_e, \theta_e$). Równania \ref{eq:testowa_kinematyka_odwrotna2} -- \ref{eq:testowa_kinematyka_odwrotna} zawierają te przekształcenia.
 
 Parametr $\gamma$ opisuje kąt pomiędzy ostatnim ogniwem prawego ramienia, a ogniwem efektora. Ze względu na redundantny charakter manipulatora
 zadanie odwrotnej kinematyki posiada nieskończoną liczbę rozwiązań. W związku z tym konieczne jest wprowadzenie dodatkowego parametru.
@@ -419,13 +371,51 @@ Kąt $\gamma$ podlega optymalizacji w trakcie procesu liczenia odwrotnej kinemat
 rozkładu sił działających na efektor na obydwa ramiona. Ze względu na pominięcie analizy sił dla testowej wersji manipulatora, można
 przyjąć go jako wartość stałą.
 
-Odwrotną kinematykę wyznacza się zaczynając od końca i postępując wstecz. W pierwszym etapie, na podstawie sinusa i kosinusa kąta
-$\theta_e$ oraz punktu $(x_e, y_e)$ obliczane jest położenie punktu łączącego oba ramiona. W kroku kolejnym, 
-wyznaczany jest kąt $\delta$ analogicznie do wzoru (\ref{eq:theta_probna}), a także nachylenie prawego ogniwa $l_3$ w globalnym
-układzie współrzędnych jako różnicę $\gamma - \theta_e$. Na podstawie tych dwóch kątów, a także położenia punktu złączenia ramion
-otrzymywane są położenia $(x_a, y_a)$ i $(x_b, y_b)$ (\ref{eq:testowa_kinematyka_odwrotna2}). Kąty napędów ($q_{a1}, q_{a2}$) oraz ($q_{b1}, q_{b2}$)
+Odwrotną kinematykę wyznacza się zaczynając od końca i postępując wstecz. W pierwszym etapie, na podstawie sinusa i cosinusa kąta
+$\theta_e$ oraz punktu $(x_e, y_e)$ obliczane jest położenie punktu łączącego oba ramiona $(x_s, y_s)$. 
+\begin{equation}
+\begin{cases}
+x_s = x_e - l_4\cos(\theta_e),\\
+y_s = y_e - l_4\sin(\theta_e).
+\end{cases}
+\label{eq:testowa_kinematyka_odwrotna2}
+\end{equation}
+
+W kroku kolejnym, 
+wyznaczany jest kąt $\phi$, a także nachylenie prawego ogniwa $l_3$ w globalnym
+układzie współrzędnych $\eta$ jako różnicę $\gamma - \theta_e$. 
+\begin{equation}
+\begin{cases}
+\varphi = \frac{3}{2}\pi - \beta - \theta_e,\\
+\eta = \gamma - \theta_e.
+\end{cases}
+\label{eq:testowa_kinematyka_odwrotna3}
+\end{equation}
+
+Na podstawie tych dwóch kątów, a także położenia punktu złączenia ramion
+otrzymywane są położenia $(x_a, y_a)$ i $(x_b, y_b)$:
+\begin{equation}
+\begin{cases}
+x_a = x_s + l_3\cos(\eta),\\
+y_a = y_s - l_3\sin(\eta),\\
+x_b = x_s - l_3\sin(\phi),\\
+y_b = y_s - l_3\cos(\phi).
+\end{cases}
+\label{eq:testowa_kinematyka_odwrotna4}
+\end{equation}
+
+Kąty napędów ($q_{a1}, q_{a2}$) oraz ($q_{b1}, q_{b2}$)
 wyznaczane są niezależnie według standardowych procedur liczenia kinematyki odwrotnej dwuwahadła, uwzględniając odcinek $l_0$.
 
+\begin{equation}
+\begin{cases}
+q_{a1} = \arctan(\frac{y_a}{x_a-l_0})-\arccos(\frac{l_1^2-l_2^2+(x_a-l_0)^2+y_a^2}{2l_1\sqrt{(x_a-l_0)^2+y_a^2}}),\\
+q_{a2} = \pi - \arccos(\frac{l_1^2+l_2^2-(x_a-l_0)^2-y_a^2}{2l_1l_2}),\\
+q_{b1} = \arctan(\frac{y_b}{x_b+l_0}) + \arccos(\frac{l_1^2-l_2^2+(x_b+l_0)^2+y_b^2}{2l_1\sqrt{(x_b+l_0)^2+y_b^2}}),\\
+q_{b2} = -\pi + \arccos(\frac{l_1^2+l_2^2-(x_b+l_0)^2-y_b^2}{2l_1l_2}),
+\end{cases}
+\label{eq:testowa_kinematyka_odwrotna}
+\end{equation}
 
 Dla takiego manipulatora zostały przeprowadzone badania wielkości jego przestrzeni roboczej, jej kształtu i wpływu na rozmiar robota.
 Znajdują się one w rozdziale \ref{sec:wymiary_probnej_wersji}. 
@@ -437,7 +427,7 @@ Ponadto wyeliminowanie wspomnianego sztywnego połączenia zwiększyło powierzc
 się na poprawę możliwości manipulacyjnych.
 
 
-\chapter{Struktura manipulatora docelowego}
+\chapter{Struktura manipulatora docelowego}\label{sec:struktura_manipulatora_docelowego}
 Na rysunku \ref{rys:docelowy_model} znajduje się stworzony w programie \texttt{Autodesk Inventor} model
 ostatecznej wersji manipulatora. Jego struktura odpowiada strukturze robota fizycznie skonstruowanego, z dokładnością
 do poszczególnych części, które zostały użyte do realizacji poszczególnych elementów. Właściwości i parametry mechaniczne
@@ -460,7 +450,7 @@ Zastosowane na końcu połączenie belki efektora z każdym z ramion w dwóch mi
 sił działających na efektor względem obu ramion. Zastosowanie mechanizmu przesuwnego pozwala
 na swobodny ruch manipulatora, przy zachowaniu równej odległości pomiędzy belką efektora i ramionami.
 
-\section{Konfiguracje niedozwolone}\label{sec:konfiguracje_niedozwolone}
+\section{Ograniczenia ruchu robota}\label{sec:konfiguracje_niedozwolone}
 Równoległa struktura manipulatora niesie za sobą szereg ograniczeń na konfiguracje przegubów, ponieważ
 istnieją potencjalne, wzajemne kolizje ramion, a także ramion i efektora. Konieczne jest wprowadzenie odpowiednich restrykcji
 na zakresy kątów napędów w celu uniknięcia uszkodzeń mechanicznych robota. Mechanizm
@@ -469,20 +459,37 @@ Ponadto uszkodzenia mogą pojawić się w konfiguracjach skrajnych, w których t
 skierowane ku sobie. Mogłoby to doprowadzić do zetknięcia się efektora z ramieniem bądź też ramion pomiędzy sobą.
 Jednym ze sposobów zarządzania ograniczeniami jest zapewnienie wypukłości zamkniętego łańcucha manipulatora, 
 które poza wyeliminowaniem potencjalnych kolizji, zapewni także również prawidłowy rozkład sił.
-Konkretne ograniczenia na wartości kątów zostaną szerzej opisane w części dotyczącej implementacji, 
-znajdującej się w rozdziale \ref{sec:ograniczenia_katow}.
+
+W manipulatorach równoległych pojawiają się także ograniczenie kątów wynikające z kinematyki 
+(rozdział \ref{sec:kinematyka_manipulatora} i równanie (\ref{rys:schemat_docelowy})). Wartości kątów $q_{a1}$ i $q_{b1}$ przy pełnej swobodzie obrotu
+mogłyby skierować ramiona $l_1$ poniżej osi X, co skutkowałoby zwróceniem się efektora w przeciwną stronę i licznymi kolizjami.
+Ponadto, kąty przegubów muszą być tak dobrane, aby manipulator tworzył zamknięty łańcuch -- można bez trudu wyobrazić sobie sytuację,
+w której odległość punktów $(x_a, y_a)$ oraz $(x_b, y_b)$ jest większa od $2l_3$. W związku z tym ograniczenia na kąty napędów
+muszą być zdefiniowane zależnie względem siebie. Kolejne ograniczenie na położenie końców ramion sterowanych opisuje nierówność $x_b < x_a$.
+Wynika ono zarówno z równania kinematyki (\ref{eq:kinematyka_prosta2}), 
+jak i potrzeby eliminacji licznych kolizji, które mogą się pojawić przy naruszeniu tego warunku.
+
+Dodatkowe ograniczenia pojawiają się przy rozpatrywaniu dynamiki robota. Maksymalne prędkości obrotowe silników, a także
+bezwładności wynikające z niezerowej masy ogniw robota prowadzą do ograniczenia przestrzeni dopuszczalnych prędkości i przyspieszeń manipulatora.
+Ponadto, zastosowanie przekładni do napędów redukuje tę przestrzeń, ponieważ większy nominalny moment obrotowy niesie za sobą
+mniejszą maksymalną prędkość. Konkretne ograniczenia na wartości kątów zostaną szerzej opisane w części dotyczącej implementacji, 
+znajdującej się w rozdziale \ref{sec:ograniczenia_katow}. 
 
 
-\section{Kinematyka manipulatora}
+\section{Kinematyka manipulatora}\label{sec:kinematyka_manipulatora}
 Efektorem (chwytakiem) nazywa się zakończenie konstrukcji manipulatora, które często posiada możliwość wymiany bądź modyfikacji. 
 Dzięki temu jeden robot może sekwencyjnie wykonywać kilka różniących się od siebie operacji. Pod pojęciem kinematyki kryje się
-funkcja odwzorowująca przestrzeń stanu Q w orientację i położenie efektora \cite{podstawy_robotyki}.
-Znajomość kinematyki umożliwia manipulowanie robotem, ponieważ algorytm sterowania
-jest w stanie obliczyć jego aktualną konfigurację i przewidzieć zmiany, które nastąpią po aktualizacji pozycji napędów.
+funkcja odwzorowująca przestrzeń stanu \emph{Q}, zawierającą położenia napędów $q \in Q$,
+w przestrzeń \emph{P} zawierającą wektor położenia i orientacji efektora $p \in P$ ($R^n$, SO(3) lub inne) \cite{podstawy_robotyki}.
+Znajomość kinematyki jest niezbędna do manipulowania robotem, ponieważ na jej podstawie wyznaczane jest
+aktualne położenie efektora. Odwrotna kinematyka \ref{sec:odwrotna_kinematyka} pozwala zaś na obliczenie konkretnej
+konfiguracji przegubów (położeń napędów) dla zadanej pozycji efektora, co jest wykorzystywane przy planowaniu trasy robota w
+przestrzeni zadaniowej. Algorytmy sterowania wykorzystują kinematykę w celu przewidzenia zmian, które nastąpią po aktualizacji pozycji napędów.
 
 \subsection{Prosta kinematyka manipulatora}\label{sec:prosta_kinematyka}
-Kinematyka prosta jest to przekształcenie geometryczne,
-które pozwala wyznaczyć położenie i orientację efektora w przestrzeni roboczej w oparciu o położenia przegubów manipulatora.
+Kinematyka prosta jest to przekształcenie geometryczne, transformujące konfigurację z przestrzeni stanu 
+$q = (q_{a1}, q_{a2}, q_{b1}, q_{b2}) \in Q$ w wektor w przestrzeni
+roboczej $p = (x_e, y_e, \theta_e) \in P$.
 Ze względu na planarność konstruowanego manipulatora wyznaczenie kinematyki sprowadza się do obliczenia położeń $x_e$ i $y_e$ oraz
 orientacji $\theta_e$, gdyż
 ruch robota odbywa się na płaszczyźnie i wartość współrzędnej Z (prostopadłej do płaszczyzny XY) jest stała.
@@ -494,19 +501,14 @@ ruch robota odbywa się na płaszczyźnie i wartość współrzędnej Z (prostop
   \label{rys:schemat_docelowy}  
 \end{figure}
 
-
-Prostą kinematykę zaprojektowanego manipulatora zawierają równania \ref{eq:kinematyka_prosta} i \ref{eq:kinematyka_prosta2}.
+W wyniku wprowadzenia symetryczności w stosunku do kinematyki testowej wersji robota
+uproszczeniu uległy równania \ref{eq:kinematyka_prosta1} -- \ref{eq:kinematyka_prosta3} 
+zawierające prostą kinematykę zaprojektowanego manipulatora.
 Wykorzystane oznaczenia znajdują swoją reprezentację na schemacie \ref{rys:schemat_docelowy}.
-W wyniku wprowadzenia symetryczności równania uległy uproszczeniu w stosunku do kinematyki testowej wersji robota (\ref{eq:testowa_kinematyka_prosta}, \ref{eq:testowa_kinematyka_prosta2}).
-\begin{equation}
-\begin{cases}
-x_e = \cos\theta_e(\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + l_4) + \frac{1}{2}(x_a+x_b),\\
-y_e = \sin\theta_e(\sqrt{l_3^2-(\frac{1}{2}\sqrt{(x_a-x_b)^2+(y_a-y_b)^2})^2} + l_4) + \frac{1}{2}(y_a+y_b),\\
-\theta_e = \pi + \arctan(\frac{y_a-y_b}{x_a-x_b}),
-\end{cases}
-\label{eq:kinematyka_prosta}
-\end{equation}
-gdzie
+
+Wyprowadzenie kinematyki prostej ponownie rozpoczyna się od wyznaczenia punktów końca ramion bezpośrednio napędzanych 
+$(x_a, y_a)$ oraz $(x_b, y_b)$ na podstawie
+sinusów i cosinusów przegubów $q \in Q$, a także odległości $l_0$:
 \begin{equation}
 \begin{cases}
 x_a = L + l_1\cos q_{a1} + l_2 \cos(q_{a1}+q_{a2}),\\
@@ -514,52 +516,186 @@ x_b = -L + l_1\cos q_{b1} + l_2 \cos(q_{b1}+q_{b2}),\\
 y_a = l_1\sin q_{a1} + l_2 \sin(q_{a1}+q_{a2}),\\
 y_b = l_1\sin q_{b1} + l_2 \sin(q_{b1}+q_{b2}).
 \end{cases}
+\label{eq:kinematyka_prosta1}
+\end{equation}
+
+Korzystając z twierdzenia cosinusów wyznaczamy kąt $\delta$, a w konsekwencji punkt łączenia ramion $(x_s, y_s)$:
+\begin{equation}
+\begin{cases}
+\alpha = \arctan(\frac{y_a-y_b}{x_a-x_b}),\\
+\delta = \arccos(\frac{d}{2l_3}),\\
+x_s = x_b + l_3\cos(\delta + \alpha),\\
+y_s = y_b + l_3\sin(\delta + \alpha).
+\end{cases}
 \label{eq:kinematyka_prosta2}
 \end{equation}
 
-Wyprowadzenie kinematyki prostej ponownie rozpoczyna się od wyznaczenia punktów $(x_a, y_a)$ oraz $(x_b, y_b)$ na podstawie
-sinusów i kosinusów przegubów ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$), a także odległości $l_0$ (\ref{eq:kinematyka_prosta2}).
+W układzie równań \ref{eq:kinematyka_prosta2} zakładamy, że $x_a \neq x_b$, zgodnie z ograniczeniami opisanymi 
+w rozdziale \ref{sec:konfiguracje_niedozwolone}.
 Orientacja manipulatora $\theta_e$ definiowana jest jako kąt $\alpha$, jednoznacznie określony przez położenia $(x_a, y_a)$ i $(x_b, y_b)$,
-powiększony o $\frac{\pi}{2}$.
+powiększony o $\frac{\pi}{2}$. Z wykorzystaniem orientacji $\theta_e$, punktu łączenia ramion $(x_s, y_s)$, 
+a także ogniwa $l_4$ wyznaczane jest położenie efektora $(x_e, y_e)$:
 
-W celu znalezienia położenia efektora konieczne jest obliczenie odległości pomiędzy punktem łączącym oba ogniwa $l_3$, a
-środkiem odcinka $|(x_a, y_a)(x_b, y_b)|$
-Następnie prowadzony jest odcinek pomiędzy tymi punktami, który w połowie przecina się z prostą będącą przedłużeniem ramienia $l_4$.
+\begin{equation}
+\begin{cases}
+x_e = x_s + l_4\cos\theta_e\\
+y_e = y_s + l_4\sin\theta_e,\\
+\theta_e =  \alpha + \frac{\pi}{2}.
+\end{cases}
+\label{eq:kinematyka_prosta3}
+\end{equation}
 
-\subsection{Odwrotna kinematyka manipulatora}
-Odwrotna kinematyka służy do wyznaczania wartości kątów w napędach robota ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$) na podstawie informacji o 
-położeniu i orientacji efektora. Jest to zadanie bardziej złożone niż kinematyka prosta, które w skrajnych przypadkach
+\subsection{Odwrotna kinematyka manipulatora}\label{sec:odwrotna_kinematyka}
+Odwrotna kinematyka służy do wyznaczania wartości kątów w napędach robota ($q \in Q$) na podstawie informacji o 
+położeniu i orientacji efektora $p \in P$. Jest to zadanie bardziej złożone niż kinematyka prosta, które w skrajnych przypadkach
 może nie mieć rozwiązania (w momencie, gdy zadane położenie efektora jest nieosiągalne bez naruszenia ograniczeń). 
 Ponadto, nawet jeśli istnieje rozwiązanie odwrotnej kinematyki, konfiguracja może być mimo wszystko nieosiągalna dla manipulatora
 -- konfiguracje pośrednie, teoretycznie umożliwiające dotarcie do niej mogą naruszać zadane ograniczenia.
 
 Redundantna struktura robota dodatkowo komplikuje zadanie odwrotnej kinematyki, ponieważ z definicji \ref{sec:redundantny}
 manipulator redundantny może osiągnąć konfigurację na nieskończenie wiele sposobów. Implikuje to nieskończoną
-liczbę rozwiązań zadania odwrotnej kinematyki. W związku z tym wprowadza się dodatkowy parametr (kryterium), które
-wykorzystuje się do optymalizacji konfiguracji wynikowej. W tym przypadku stosuje się lokalne miary jakości, które są szczególnymi
+liczbę rozwiązań zadania odwrotnej kinematyki. W związku z tym wprowadza się dodatkowy parametr (kryterium), który
+wykorzystuje się do wyboru sposobu optymalizacji konfiguracji wynikowej. Możliwe jest stosowanie lokalnych miar jakości, które są szczególnymi
 przypadkami kryteriów przedstawionych w rozdziale \ref{sec:aspekt_badawczy}. 
 
-Tutaj powinno być coś o konkretnym kryterium, ale jeszcze muszę to przeanalizować i wybrać najlepsze.
-
+Wyznaczanie odwrotnej kinematyki rozpoczyna się od obliczenia położenia punktu łączącego oba ramiona $(x_s, y_s)$:
 \begin{equation}
 \begin{cases}
-q_{a1} = \arctan(\frac{y_a}{x_a-L})-\arccos(\frac{l_1^2-l_2^2+(x_a-L)^2+y_a^2}{2l_1\sqrt{(x_a-L)^2+y_a^2}}),\\
-q_{a2} = \pi - \arccos(\frac{l_1^2+l_2^2-(x_a-L)^2-y_a^2}{2l_1l_2}),\\
-q_{b1} = \arctan(\frac{y_b}{x_b+L}) + \arccos(\frac{l_1^2-l_2^2+(x_b+L)^2+y_b^2}{2l_1\sqrt{(x_b+L)^2+y_b^2}}),\\
-q_{b2} = -\pi + \arccos(\frac{l_1^2+l_2^2-(x_b+L)^2-y_b^2}{2l_1l_2}),
-\end{cases}
-\label{eq:kinematyka_odwrotna}
-\end{equation}
-gdzie
-\begin{equation}
-\begin{cases}
-x_a = x_e + l_3\sin(\gamma + \theta_e - \frac{\pi}{2}) - l_4\cos(\theta_e),\\
-x_b = x_e - l_3\sin(\gamma - \theta_e + \frac{\pi}{2}) - l_4\cos(\theta_e),\\
-y_a = y_e - l_3\cos(\gamma + \theta_e - \frac{\pi}{2}) - l_4\sin(\theta_e),\\
-y_b = y_e - l_3\cos(\gamma - \theta_e + \frac{\pi}{2}) - l_4\sin(\theta_e).
+x_s = x_e + l_4\cos(\theta_e),\\
+y_s = y_e - l_4\sin(\theta_e).
 \end{cases}
 \label{eq:kinematyka_odwrotna2}
 \end{equation}
+
+Przy analizie projektowanego manipulatora dodatkowym parametrem jest kąt $\gamma$, określony pomiędzy ogniwem efektora, 
+a ostatnimi ogniwami każdego z ramion.
+Jest on odpowiedzialny za rozkład siły działającej na efektor na obydwa ramiona, w związku z czym jest to istotny aspekt analizy sił.
+
+Korzystając z orientacji manipulatora, parametru $\gamma$ oraz punktu $(x_s, y_s)$ wyznaczamy położenia punktów $(x_a, y_a)$ oraz $(x_b, y_b)$:
+\begin{equation}
+\begin{cases}
+\alpha = \theta_e - \frac{\pi}{2}, \\
+x_a = x_s + l_3\sin(\gamma + \alpha),\\
+y_a = y_s - l_3\cos(\gamma + \alpha),\\
+x_b = x_s - l_3\sin(\gamma - \alpha),\\
+y_b = y_s - l_3\cos(\gamma - \alpha).
+\end{cases}
+\label{eq:kinematyka_odwrotna3}
+\end{equation}
+
+Kąty napędów ($q_{a1}, q_{a2}$) oraz ($q_{b1}, q_{b2}$)
+wyznaczane są niezależnie według standardowych procedur liczenia kinematyki odwrotnej dwuwahadła, uwzględniając przesunięcie pierwszych
+przegubów ramion o $(\pm l_0, 0)$, identycznie jak dla manipulatora testowego:
+\begin{equation}
+\begin{cases}
+q_{a1} = \arctan(\frac{y_a}{x_a-l_0})-\arccos(\frac{l_1^2-l_2^2+(x_a-l_0)^2+y_a^2}{2l_1\sqrt{(x_a-l_0)^2+y_a^2}}),\\
+q_{a2} = \pi - \arccos(\frac{l_1^2+l_2^2-(x_a-l_0)^2-y_a^2}{2l_1l_2}),\\
+q_{b1} = \arctan(\frac{y_b}{x_b+l_0}) + \arccos(\frac{l_1^2-l_2^2+(x_b+l_0)^2+y_b^2}{2l_1\sqrt{(x_b+l_0)^2+y_b^2}}),\\
+q_{b2} = -\pi + \arccos(\frac{l_1^2+l_2^2-(x_b+l_0)^2-y_b^2}{2l_1l_2}),
+\end{cases}
+\label{eq:kinematyka_odwrotna}
+\end{equation}
+
+\section{Jakobian manipulatora}\label{sec:jakobian}
+W manipulatorach równoległych, podobnie jak miało to miejsce w przypadku szeregowych, istnieje liniowa zależność pomiędzy prędkościami
+napędzanych przegubów $\dot{q}$, a prędkościami liniowymi i kątowymi platformy (efektora), oznaczanymi jako $\dot{p}$ \cite{handbook}.
+Zależność ta nazywana jest jakobianem manipulatora i definiuje się ją jako macierz \emph{J}:
+\begin{equation}
+\dot{p}=J(q)\dot{q},
+\label{eq:jakobian}
+\end{equation}
+gdzie
+\begin{equation}
+J(p) = 
+\begin{bmatrix}
+\frac{\delta x_e}{\delta q_{a1}} & \frac{\delta x_e}{\delta q_{a2}} & \frac{\delta x_e}{\delta q_{b1}} & \frac{\delta x_e}{\delta q_{b2}} \\
+\frac{\delta y_e}{\delta q_{a1}} & \frac{\delta y_e}{\delta q_{a2}} & \frac{\delta y_e}{\delta q_{b1}} & \frac{\delta y_e}{\delta q_{b2}} \\
+\frac{\delta \theta_e}{\delta q_{a1}} & \frac{\delta \theta_e}{\delta q_{a2}} & \frac{\delta \theta_e}{\delta q_{b1}} & \frac{\delta \theta_e}{\delta q_{b2}}
+\end{bmatrix}
+\label{eq:jakobian2}
+\end{equation}
+
+Jakobian wykorzystywany jest do analizy błędów (dokładność pozycjonowania efektora jest zależna od precyzji sterowania napędów),
+kalibracji, analizy statycznej \ref{sec:analiza_statyczna}, a także wyznaczania konfiguracji osobliwych. W manipulatorach 
+równoległych proces obliczeniowy jakobianu
+jest z reguły dużo bardziej skomplikowany niż dla manipulatorów szeregowych, ponieważ w najprostszej formie jest on wyznaczany
+jako pochodne cząstkowe równań kinematyki (macierz Jacobiego), gdzie zmiennymi są napędy robota ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$). 
+Również w przypadku rozpatrywanego manipulatora macierz ta jest bardzo złożona (obliczenia zostały wykonane z wykorzystaniem
+środowiska \emph{Mathematica}), w związku została ona zamieszczona w załączniku do pracy.
+
+Korzystając z równania \ref{eq:jakobian} możliwe jest obliczenie prędkości obrotowych, które pojawiają się w przegubach
+przy zadanej prędkości efektora w przestrzeni zadaniowej. Własność ta jest bardzo przydatna przy doborze napędów robota,
+ponieważ dla założonej maksymalnej prędkości efektora wyznaczane są maksymalne prędkości w przegubach, będące
+jednymi z istotniejszych parametrów silników. Biorąc pod uwagę fakt, że przekładnie zwiększają momenty silników kosztem prędkości obrotowej
+(wyrażanej w obrotach na minutę), konieczne jest wypracowanie kompromisu zapewniającego najefektywniejszą pracę manipulatora.
+
+ 
+
+\section{Analiza statyczna}\label{sec:analiza_statyczna}
+Jednym z zastosowań jakobianu jest analiza statyczna. Umożliwia ona wyznaczenie wektora momentów pojawiających się w napędach
+na skutek sił zewnętrznych działających na manipulator (równanie \ref{eq:analiza_statyczna}). 
+Na podstawie jakobianu opisanego równaniem \ref{eq:jakobian2}, który jest liczony
+na podstawie przekształcenia (kinematyki) od napędów do efektora, możliwe jest wyznaczenie momentów w silnikach generowanych
+przez siły działające na efektor. Dla innych punktów przyłożeń sił konieczne byłoby zmodyfikowanie równań kinematyki.
+\begin{equation}
+\tau=J^Tf.
+\label{eq:analiza_statyczna}
+\end{equation}
+
+W równaniu \ref{eq:analiza_statyczna} \emph{$\tau$} oznacza wektor momentów napędów (według kolejności ze wzoru \ref{eq:jakobian2}), natomiast
+\emph{f} definiuje wektor sił działających na efektor (jego rozmiar zależy od liczby stopni swobody manipulatora) w bazowym
+układzie współrzędnych manipulatora. Dla projektowanego manipulatora są to siły X, Y oraz moment $\theta$.
+
+Analiza statyczna ma istotny wpływ na dobór silników do manipulatora. Dla założonej maksymalnej siły działającej na efektor
+określone zostały wymagane momenty maksymalne pojawiające się na silnikach. Jest to jedno z kryteriów doboru silników, 
+które zostało wzięte pod uwagę w rozdziale \ref{sec:dobor_silnikow}. W tabeli \ref{tab:analiza_statyczna} znajdują się
+maksymalne momenty mogące się pojawić na silnikach dla kilku różnych wartości sił zewnętrznych działających na efektor
+przy stałej, przykładowej konfiguracji manipulatora:
+\begin{itemize}
+\item $l_0=0.1m$,
+\item $l_1=0.22m$,
+\item $l_2=0.33m$,
+\item $l_3=0.35m$,
+\item $l_4=0.1m$,
+\item $q_{a1}=\frac{\pi}{3}$,
+\item $q_{a2}=\frac{\pi}{2}$,
+\item $q_{b1}=\frac{2\pi}{3}$,
+\item $q_{b2}=-\frac{\pi}{2}$,
+\end{itemize}
+
+Obliczenia zostały wykonane z wykorzystaniem środowiska \emph{Mathematica}, na podstawie wzoru \ref{eq:analiza_statyczna}, a także
+jakobianu opisanego w rozdziale \ref{sec:jakobian}.
+
+\begin{table}[tp]
+  \caption{Analiza statyczna}
+  \label{tab:analiza_statyczna}
+  \centering
+  \begin{tabular}{||c|c||}
+    \hline\hline
+{\bf Wektor sił/momentów [N]/[Nm]} & {\bf Momenty w napędach [Nm]} \\
+{\bf ($f_x, f_y, m_{\theta}$)} & {\bf ($\tau_{a1}, \tau_{a2}, \tau_{b1}, \tau_{b2}$)} \\\hline\hline
+(-10, 0, 0) & (3.34, 7.50, 10.46, 10.8) \\
+(-100, 0, 0) & (33.45, 75.03, 104.55, 108.03) \\
+(0, -10, 0) & (-0.48, -1.25, -3.03, -4.46) \\
+(0, -100, 0) & (-4.85, -12.46, -30.31, -44.7) \\
+(0, 0, 10) & (11.60, 18.85, 11.60, 18.85) \\
+(0, 0, 100) & (115.97, 188.54, 115.93, 188.54) \\
+(-100, -100, 0) & (28.60, 62.57, 74.24, 63.33) \\
+(100, 100, 0) & (-28.60, -62.57, -74.24, -63.33) \\
+(100, 100, 100) & (87.37, 125.97, 41.73, 125.21) \\
+\hline\hline
+  \end{tabular}
+\end{table}
+\section{Wyważenie statyczne}
+Kolejnym ciekawym problemem statycznym dotyczącym manipulatorów równoległych jest wyważenie statyczne \cite{handbook}.
+Manipulator równoległy jest wyważony statycznie, gdy waga poszczególnych ogniw nie powoduje w bezruchu jakichkolwiek 
+momentów w napędach dla każdej konfiguracji robota. Zapewnienie wyważenia statycznego bardzo często dokonywane jest za pomocą
+sprężyn, co prowadzi do konieczności utrzymania stałej energii potencjalnej układu, na którą składają się energia elastyczności sprężyn, 
+a także grawitacja. W przypadku braku sprężyn należy zadbać, by położenie środka masy robota nie zmieniało się wzdłuż wektora
+grawitacji (jedynie prostopadle do niego).
+
+Planarna, prostopadła do siły grawitacji budowa projektowanego manipulatora implikuje stałą energię potencjalną układu. W związku z tym,
+bez potrzeby wprowadzania sprężyn konstruowany robot jest wyważony statycznie.
 
 \section{Dynamika manipulatora}
 Sterowanie robotem najczęściej odbywa się z wykorzystaniem modelu dynamiki. Ciała sztywne stanowiące ogniwa
@@ -580,7 +716,7 @@ robota. Istnieje kilka podejść do tego zadania \ref{sec:aspekt_badawczy}, jedn
 wykorzystana analiza stosunku wielkości przestrzeni roboczej do rozmiarów poszczególnych
 elementów manipulatora.
 
-\section{Obliczenie przestrzeni roboczej manipulatora}
+\section{Obliczenie przestrzeni roboczej manipulatora}\label{sec:obliczenie_przestrzeni_roboczej}
 W celu obliczenia przestrzeni roboczej manipulatora stworzony został oddzielny program w języku C++, 
 który realizował to zadanie. Składał się on przede wszystkim z klasy symulującej obiekt manipulatora, 
 w której zaimplementowane zostały metody liczenia zarówno prostej jak i odwrotnej kinematyki dla
@@ -654,49 +790,50 @@ konfiguracje dla kilku przykładowych wartości L, będących połową odległo�
 \begin{itemize}
 \item kinematyka prosta:
 \begin{itemize}
-\item L=0: l1=40, l2=20, l3=40, l4=0,
-\item L=10: l1=30, l2=30, l3=40, l4=0,
-\item L=20: l1=20, l2=40, l3=40, l4=0,
-\item L=30: l1=20, l2=30, l3=50, l4=0,
-\item L=40: l1=20, l2=30, l3=50, l4=0,
+\item $l_0=0:$ $l_1=40$, $l_2=20$, $l_3=40$, $l_4=0$,
+\item $l_0=10:$ $l_1=30$, $l_2=30$, $l_3=40$, $l_4=0$,
+\item $l_0=20:$ $l_1=20$, $l_2=40$, $l_3=40$, $l_4=0$,
+\item $l_0=30:$ $l_1=20$, $l_2=30$, $l_3=50$, $l_4=0$,
+\item $l_0=40:$ $l_1=20$, $l_2=30$, $l_3=50$, $l_4=0$,
 \end{itemize}
 \item kinematyka odwrotna:
 \begin{itemize}
-\item L=0: l1=30, l2=40, l3=30, l4=0,
-\item L=10: l1=30, l2=40, l3=30, l4=0,
-\item L=20: l1=30, l2=30, l3=40, l4=0,
-\item L=30: l1=30, l2=20, l3=50, l4=0,
-\item L=40: l1=20, l2=30, l3=50, l4=0,
+\item $l_0=0:$ $l_1=30$, $l_2=40$, $l_3=30$, $l_4=0$,
+\item $l_0=10:$ $l_1=30$, $l_2=40$, $l_3=30$, $l_4=0$,
+\item $l_0=20:$ $l_1=30$, $l_2=30$, $l_3=40$, $l_4=0$,
+\item $l_0=30:$ $l_1=30$, $l_2=20$, $l_3=50$, $l_4=0$,
+\item $l_0=40:$ $l_1=20$, $l_2=30$, $l_3=50$, $l_4=0$,
 \end{itemize}
 \end{itemize}
-Warto wspomnieć, że parametry l1-l4 były iterowane na przedziale od 0 do 50. Jak widzimy, dla tej wersji manipulatora ostatnie z ramion
+Warto wspomnieć, że parametry $l_1-l_4$ były iterowane na przedziale od 0 do 50. Jak widzimy, dla tej wersji manipulatora ostatnie z ramion
 najmniej wpływa na wielkość przestrzeni roboczej, w związku z czym algorytm starał się je eliminować (dzięki temu inne ramiona mogły by dłuższe).
 Przy oddalaniu początków ramion od siebie wzrasta znaczenie trzeciego ramienia, podczas gdy maleje pierwszego. Różnice pomiędzy prostą
 i odwrotną kinematyką wynikają głównie z różnych metodologii liczenia, jednakże warto rozważyć i jedną i drugą opcję w celu zebrania
 większej ilości obserwacji. Posiadając kilka wybranych konfiguracji manipulatora możemy teraz dokładniej już (z krokiem 1) znaleźć
-najlepszą dla nich odległość L. Wyniki zostały zaprezentowane na wykresach, rysunek \ref{rys:probna_wersja_prosta_kin} prosta kinematyka
+najlepszą dla nich odległość $l_0$. Wyniki zostały zaprezentowane na wykresach, rysunek \ref{rys:probna_wersja_prosta_kin} prosta kinematyka
 i rysunek \ref{rys:probna_wersja_odwrotna_kin}. Jak można się było spodziewać, w obu przypadkach największa przestrzeń robocza jest
-osiągana dla małych wartości L. Jednakże jest to sprzeczne z wymaganiem dotyczącym rozłożenia sił działających na efektor na
+osiągana dla małych wartości $l_0$. Jednakże jest to sprzeczne z wymaganiem dotyczącym rozłożenia sił działających na efektor na
 poszczególne napędy -- zależy nam, aby ramiona były w pewnej odległości od siebie. W związku z tym konieczne jest wypracowanie konsensusu.
-Wszystkie konfiguracje długości zwracają stosunkowo dość duże przestrzenie robocze dla parametru L znajdującego się w przedziale (10,20).
+Wszystkie konfiguracje długości zwracają stosunkowo dość duże przestrzenie robocze dla parametru $l_0$ znajdującego się w przedziale (10,20).
 Jeżeli to byłaby ostateczna wersja manipulatora, jako kompromis wartość z tego przedziału zostałaby wybrana.
+
 
 \begin{figure}[tp]
   \setlength{\unitlength}{1.0cm}
   \centering
-	\subfigure[L=0: l1=40, l2=20, l3=40, l4=0]{
+	\subfigure[$l_0=0$: $l_1=40$, $l_2=20$, $l_3=40$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Forward/L=0}
 	}
-	\subfigure[L=10: l1=30, l2=30, l3=40, l4=0]{
+	\subfigure[$l_0=10$: $l_1=30$, $l_2=30$, $l_3=40$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Forward/L=10}
 	} \\
-	\subfigure[L=20: l1=20, l2=40, l3=40, l4=0]{
+	\subfigure[$l_0=20$: $l_1=20$, $l_2=40$, $l_3=40$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Forward/L=20}
 	}
-	\subfigure[L=30: l1=20, l2=30, l3=50, l4=0]{
+	\subfigure[$l_0=30$: $l_1=20$, $l_2=30$, $l_3=50$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Forward/L=30}
 	} \\
-	\subfigure[L=40: l1=20, l2=30, l3=50, l4=0]{
+	\subfigure[$l_0=40$: $l_1=20$, $l_2=30$, $l_3=50$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Forward/L=40}
 	}
   \label{rys:probna_wersja_prosta_kin}  
@@ -708,30 +845,121 @@ Jeżeli to byłaby ostateczna wersja manipulatora, jako kompromis wartość z te
 \begin{figure}[tp]
   \setlength{\unitlength}{1.0cm}
   \centering
-	\subfigure[L=0: l1=30, l2=40, l3=30, l4=0]{
+	\subfigure[$l_0=0$: $l_1=30$, $l_2=40$, $l_3=30$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Inverse/L=0_inv}
 	}
-	\subfigure[L=10: l1=30, l2=40, l3=30, l4=0]{
+	\subfigure[$l_0=10$: $l_1=30$, $l_2=40$, $l_3=30$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Inverse/L=10_inv}
 	} \\
-	\subfigure[L=20: l1=30, l2=30, l3=40, l4=0]{
+	\subfigure[$l_0=20$: $l_1=30$, $l_2=30$, $l_3=40$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Inverse/L=20_inv}
 	}
-	\subfigure[L=30: l1=30, l2=20, l3=50, l4=0]{
+	\subfigure[$l_0=30$: $l_1=30$, $l_2=20$, $l_3=50$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Inverse/L=30_inv}
 	} \\
-	\subfigure[L=40: l1=20, l2=30, l3=50, l4=0]{
+	\subfigure[$l_0=40$: $l_1=20$, $l_2=30$, $l_3=50$, $l_4=0$]{
 	  \includegraphics[width=0.4\textwidth]{grafika/probna/Inverse/L=40_inv}
 	}
   \label{rys:probna_wersja_odwrotna_kin}  
   \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
-  manipulatora przy wykorzystaniu odwrotnej}
+  manipulatora przy wykorzystaniu odwrotnej kinematyki}
 
 \end{figure}
 
 \subsection{Wyznaczenie wymiarów ostatecznej wersji manipulatora}
+Analogiczne badania zostały przeprowadzone dla manipulatora docelowego, opisanego w rozdziale \ref{sec:struktura_manipulatora_docelowego}.
+Przestrzeń robocza tego robota jest symetryczna, a także bardziej regularna niż w przypadku wersji próbnej -- brak jest ostrych krawędzi przestrzeni,
+a także jest ona zbliżona do postaci wypukłej. Dla wersji docelowej zwiększona została dokładność obliczeń, co zaowocowało wydłużonym czasem działania
+programu. Większą dokładność wprowadzono poprzez zwiększenie ziarnistości siatki przestrzeni roboczej, a także poprzez zmniejszenie kroku algorytmu,
+który odpowiadał za wyznaczanie kolejnych konfiguracji. Ponadto długość każdego z ramion iterowana była o wartość 1 (a nie 5 jak poprzednio), 
+w związku z czym optymalny stosunek długości ramion został wyznaczony bardziej precyzyjnie. Ogniwa $l_1-l_4$ iterowane były na przedziale
+10-45, a ich suma powinna równać się 100. Jak się okazało, ogniwo $l_4$ ponownie ma najmniejszy wpływ na rozmiar przestrzeni roboczej,
+w związku z czym algorytm zwracał zawsze wartość $l_4=10$.
 
+Poniżej znajdują się optymalne konfiguracje manipulatora dla kilku wybranych parametrów $l_0$, a także kinematyk prostej i odwrotnej
+(wyniki różnią się ze względu na metodologię liczenia przestrzeni, jednakże tendencje są zachowane):
+\begin{itemize}
+\item kinematyka prosta:
+\begin{itemize}
+\item $l_0=0:$ $l_1=31$, $l_2=28$, $l_3=31$, $l_4=10$,
+\item $l_0=5:$ $l_1=24$, $l_2=34$, $l_3=32$, $l_4=10$,
+\item $l_0=10:$ $l_1=22$, $l_2=33$, $l_3=35$, $l_4=10$,
+\item $l_0=15:$ $l_1=24$, $l_2=25$, $l_3=41$, $l_4=10$,
+\item $l_0=20:$ $l_1=25$, $l_2=20$, $l_3=45$, $l_4=10$,
+\item $l_0=25:$ $l_1=18$, $l_2=28$, $l_3=44$, $l_4=10$,
+\item $l_0=30:$ $l_1=16$, $l_2=29$, $l_3=45$, $l_4=10$,
+\end{itemize}
+\item kinematyka odwrotna:
+\begin{itemize}
+\item $l_0=0:$ $l_1=43$, $l_2=28$, $l_3=19$, $l_4=10$,
+\item $l_0=5:$ $l_1=40$, $l_2=24$, $l_3=26$, $l_4=10$,
+\item $l_0=10:$ $l_1=39$, $l_2=25$, $l_3=26$, $l_4=10$,
+\item $l_0=15:$ $l_1=35$, $l_2=23$, $l_3=32$, $l_4=10$,
+\item $l_0=20:$ $l_1=33$, $l_2=18$, $l_3=39$, $l_4=10$,
+\item $l_0=25:$ $l_1=25$, $l_2=24$, $l_3=41$, $l_4=10$,
+\item $l_0=30:$ $l_1=28$, $l_2=18$, $l_3=44$, $l_4=10$,
+\end{itemize}
+\end{itemize}
 
+Tak jak poprzednio przy małych odległościach $l_0$ funkcja kryterialna wybierała ogniwo $l_1$ jako najważniejsze, przypisując mu
+największe wartości. W miarę zwiększania $l_0$ maleje znaczenie pierwszego ogniwa, a rośnie trzeciego $l_3$. Takie same wnioski
+można wysnuć zarówno z prostej jak i odwrotnej kinematyki, a rozbieżności w długościach ogniw ponownie wynikają z technik liczenia przestrzeni
+roboczej -- są one zupełnie inne \ref{sec:obliczenie_przestrzeni_roboczej}.
+
+Dla kilku wybranych konfiguracji możliwie najbardziej różniących się od siebie dla prostej i odwrotnej kinematyki
+wykreślone zostały zależności powierzchni przestrzeni roboczej od odległości początków ramion $l_0$. Znajdują się one
+na rysunkach \ref{rys:l0_prosta_kin} i \ref{rys:l0_odwrotna_kin}.
+
+Wnioski do tych rysunków jak już będą rysunki.
+
+Przy dobieraniu rzeczywistych długości ramion pod uwagę należy wziąć również mechaniczną konstrukcję robota, która
+wprowadza pewne ograniczenia na długości ogniw. Ponadto, ramiona budowane są z dostępnych elementów, co dodatkowo ogranicza swobodę
+doboru ich gabarytów. Przy analizie przestrzeni roboczej opierano się jedynie na kinematyce robota, która nie bierze
+pod uwagę ani łączeń pomiędzy ogniwami, ani mechanicznych możliwości zastosowanych części. W związku z tym niniejsza analiza stanowi
+jedynie podstawę wyboru elementów, a faktyczne długości ramion w oparciu o niniejsze rozważania zostały wyselekcjonowane w rozdziale
+\ref{sec:mechaniczna_konstrukcja_manipulatora}.
+%
+%\begin{figure}[tp]
+%  \setlength{\unitlength}{1.0cm}
+%  \centering
+%	\subfigure[$l_0=0:$ $l_1=43$, $l_2=28$, $l_3=19$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=0}
+%	}
+%	\subfigure[$l_0=5:$ $l_1=24$, $l_2=34$, $l_3=32$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=5}
+%	} \\
+%	\subfigure[$l_0=20:$ $l_1=33$, $l_2=18$, $l_3=39$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=20}
+%	}
+%	\subfigure[$l_0=30:$ $l_1=28$, $l_2=18$, $l_3=44$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=30}
+%	}
+%  \label{rys:l0_prosta_kin}  
+%  \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
+%  manipulatora przy wykorzystaniu prostej kinematyki}
+%
+%\end{figure}
+%
+%\begin{figure}[tp]
+%  \setlength{\unitlength}{1.0cm}
+%  \centering
+%	\subfigure[$l_0=0$: $l_1=30$, $l_2=40$, $l_3=30$, $l_4=0$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=0_inv}
+%	}
+%	\subfigure[$l_0=5:$ $l_1=40$, $l_2=24$, $l_3=26$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=5_inv}
+%	} \\
+%	\subfigure[$l_0=20:$ $l_1=33$, $l_2=18$, $l_3=39$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=20_inv}
+%	}
+%	\subfigure[$l_0=30:$ $l_1=28$, $l_2=18$, $l_3=44$, $l_4=10$]{
+%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=30_inv}
+%	}
+%  \label{rys:l0_odwrotna_kin}  
+%  \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
+%  manipulatora przy wykorzystaniu odwrotnej}
+%
+%\end{figure}
 \chapter{Pomiar siły}
 Podatność manipulatora zakłada precyzyjny pomiar sił, którymi oddziałuje on na swoje otoczenie. Rozpoznawanie
 zarówno wartości, jak i kierunków sił jest zadaniem złożonym i wymaga zastosowania dużej liczby czujników, które
@@ -850,7 +1078,32 @@ gdzie
 
 
 
-%\appendix
+\appendix
+\chapter{Jakobian manipulatora}\label{sec:dodatek_jakobian_manipulatora}
+$
+J_{11} = 
+ -\frac{l_4 (l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}])}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]) \sqrt{1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}} +\\ 
+ \\
+ +\frac{l_4 (-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2 \sqrt{1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}}+\\
+ \\
+ +\frac{l_4 (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{2 (2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])} \cdot \\
+ \\
+ \cdot \langle\frac{\left(\frac{2 (l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}\right)}{ \left(1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}\right)^{3/2}}+\\
+\\
+-\frac{\frac{2 (-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^3}}{\left(1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}\right)^{3/2}}\rangle+\\
+ \\
+ -l_3 \langle\frac{\frac{l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]}{2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]}-\frac{(-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}{1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}\\
+ \\
+ -\langle\frac{2 (2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]) (-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}])}{4 l_3 \sqrt{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}}+\\
+ \\
+ + \frac{2 (l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{4 l_3 \sqrt{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}} \rangle\cdot \\
+ \\
+ \cdot \frac{1}{\sqrt{1-\frac{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{4 l_3^2}}}\rangle \\
+ \\
+ \sin\langle\arccos\left[\frac{\sqrt{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}}{2 l_3}\right] +\\
+ \\
+ +\arctan\left[\frac{l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}]}{2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]}\right]\rangle 
+$
 %\chapter{Zawartość płyty CD}
 %Do pracy dołączono płytę CD zawierającą:
 %\begin{enumerate}
