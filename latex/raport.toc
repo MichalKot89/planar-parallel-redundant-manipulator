@@ -20,24 +20,37 @@
 \contentsline {subsection}{\numberline {4.3.1}Prosta kinematyka manipulatora}{16}
 \contentsline {subsection}{\numberline {4.3.2}Odwrotna kinematyka manipulatora}{18}
 \contentsline {section}{\numberline {4.4}Jakobian manipulatora}{19}
-\contentsline {section}{\numberline {4.5}Analiza statyczna}{19}
-\contentsline {section}{\numberline {4.6}Wywa\IeC {\.z}enie statyczne}{20}
-\contentsline {section}{\numberline {4.7}Dynamika manipulatora}{21}
+\contentsline {section}{\numberline {4.5}Analiza statyczna}{20}
+\contentsline {section}{\numberline {4.6}Wywa\IeC {\.z}enie statyczne}{21}
+\contentsline {section}{\numberline {4.7}Dynamika manipulatora}{22}
 \contentsline {chapter}{\numberline {5}Wyznaczenie wymiar\IeC {\'o}w manipulatora}{23}
 \contentsline {section}{\numberline {5.1}Obliczenie przestrzeni roboczej manipulatora}{23}
 \contentsline {subsection}{\numberline {5.1.1}Przestrze\IeC {\'n} robocza na bazie prostej kinematyki}{23}
-\contentsline {subsection}{\numberline {5.1.2}Przestrze\IeC {\'n} robocza na bazie odwrotnej kinematyki}{23}
+\contentsline {subsection}{\numberline {5.1.2}Przestrze\IeC {\'n} robocza na bazie odwrotnej kinematyki}{24}
 \contentsline {subsection}{\numberline {5.1.3}Obwiednia przestrzeni roboczej}{24}
 \contentsline {subsection}{\numberline {5.1.4}Wyznaczanie powierzchni przestrzeni roboczej}{24}
 \contentsline {section}{\numberline {5.2}Wyznaczenie wymiar\IeC {\'o}w manipulatora na podstawie przestrzeni roboczej}{24}
 \contentsline {subsection}{\numberline {5.2.1}Wyznaczenie wymiar\IeC {\'o}w pr\IeC {\'o}bnej wersji manipulatora}{25}
-\contentsline {subsection}{\numberline {5.2.2}Wyznaczenie wymiar\IeC {\'o}w ostatecznej wersji manipulatora}{25}
-\contentsline {chapter}{\numberline {6}Pomiar si\IeC {\l }y}{31}
-\contentsline {section}{\numberline {6.1}Rozk\IeC {\l }ad si\IeC {\l }}{31}
-\contentsline {section}{\numberline {6.2}Pomiar pr\IeC {\k a}du silnik\IeC {\'o}w}{31}
-\contentsline {section}{\numberline {6.3}Tensometry}{31}
-\contentsline {subsection}{\numberline {6.3.1}Uk\IeC {\l }ad pomiarowy}{32}
-\contentsline {subsection}{\numberline {6.3.2}Testy}{33}
-\contentsline {subsection}{\numberline {6.3.3}Umieszczenie czujnik\IeC {\'o}w na konstrukcji manipulatora}{33}
-\contentsline {chapter}{\numberline {A}Jakobian manipulatora}{35}
-\contentsline {chapter}{Bibliografia}{35}
+\contentsline {subsection}{\numberline {5.2.2}Wyznaczenie wymiar\IeC {\'o}w ostatecznej wersji manipulatora}{26}
+\contentsline {chapter}{\numberline {6}Pomiar si\IeC {\l }y}{33}
+\contentsline {section}{\numberline {6.1}Rozk\IeC {\l }ad si\IeC {\l }}{33}
+\contentsline {section}{\numberline {6.2}Pomiar pr\IeC {\k a}du silnik\IeC {\'o}w}{33}
+\contentsline {section}{\numberline {6.3}Tensometry}{33}
+\contentsline {subsection}{\numberline {6.3.1}Uk\IeC {\l }ad pomiarowy}{34}
+\contentsline {section}{\numberline {6.4}Belki tensometryczne}{35}
+\contentsline {subsection}{\numberline {6.4.1}Testy}{37}
+\contentsline {subsection}{\numberline {6.4.2}Umieszczenie czujnik\IeC {\'o}w na konstrukcji manipulatora}{39}
+\contentsline {chapter}{\numberline {7}Uk\IeC {\l }ad elektroniczny}{41}
+\contentsline {section}{\numberline {7.1}Mikrokontroler}{41}
+\contentsline {subsection}{\numberline {7.1.1}Programowanie mikrokontrolera}{41}
+\contentsline {section}{\numberline {7.2}Czujniki}{43}
+\contentsline {section}{\numberline {7.3}Komunikacja z PC}{43}
+\contentsline {subsection}{\numberline {7.3.1}Konwersja napi\IeC {\k e}\IeC {\'c}}{44}
+\contentsline {section}{\numberline {7.4}Silniki}{44}
+\contentsline {chapter}{\numberline {8}Sterowanie manipulatorem}{45}
+\contentsline {section}{\numberline {8.1}Bezpo\IeC {\'s}rednie sterowanie si\IeC {\l }\IeC {\k a}}{45}
+\contentsline {subsection}{\numberline {8.1.1}Kontrola interakcji}{46}
+\contentsline {subsection}{\numberline {8.1.2}Hybrydowanie sterowanie pr\IeC {\k e}dko\IeC {\'s}ci\IeC {\k a}/si\IeC {\l }\IeC {\k a}}{47}
+\contentsline {section}{\numberline {8.2}Algorytm sterowania}{48}
+\contentsline {chapter}{\numberline {A}Jakobian manipulatora}{49}
+\contentsline {chapter}{Bibliografia}{52}
