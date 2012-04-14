@@ -17,6 +17,8 @@
 \usepackage{epstopdf}
 \usepackage{subfigure}
 \usepackage{psfrag}
+\usepackage{amsmath}
+\usepackage{textcomp}
 
 \lstset{ %
 language=C++,                	% choose the language of the code
@@ -153,41 +155,46 @@ planarnych istotna jest redukcja masy ruchomych elementów. Dobranie odpowiednie
 (niecałkowicie) wyeliminować wpływ przyciągania ziemskiego na dynamikę, ponieważ napędy będą poruszać elementami prostopadle do siły grawitacji
 (obciążenie rozłoży się na napędy i łożyska).
 
-\section{Manipulator podatny}
-Podatność \cite{handbook} definiowana jest jako możliwość kontroli sił, którymi robot oddziałuje
-na otoczenie bez precyzyjnej znajomości środowiska, w którym się znajduje. Wykorzystanie jedynie prędkości i przyspieszeń
-do sterowania ruchu manipulatora prowadzi do pojawiania się dużych sił przy kontakcie z niespodziewanymi obiektami. Pojawiające się
+\section{Manipulator podatny}\label{sec:podatnosc}
+Podatność \cite{handbook} definiowana jest jako zdolność robota do reagowania na siły, którymi oddziałuje on na otoczenie,
+bez znajomości precyzyjnego modelu środowiska, w którym się znajduje. W tradycyjnym podejściu, 
+do sterowania ruchu manipulatora wykorzystuje się jedynie położenia i prędkości.
+Takie rozwiązanie nie jest odporne na potencjalne siły mogące się pojawić przy kontakcie z niespodziewanymi obiektami, 
+występujące na skutek zakłóceń powodowanych przez siły zewnętrzne. Obserwowane
 w tym momencie przyspieszenia prowadzą do sporych rozbieżności i błędów pozycjonowania efektora. Problem ten może być
 rozwiązany poprzez wprowadzenie równoległego sterowania siłą, które umożliwia regulację wartości oddziaływania efektora
-na otoczenie. Kontrolowanie siły efektora znajduje swoje zastosowanie zarówno przy zatrzymywaniu ruchu robota w kontakcie z
-obiektami sztywnymi, jak i zręcznym manipulowaniu obiektami miękkimi (np. chwytanie gąbki).
+na otoczenie. Kontrolowanie siły (oddziaływania) efektora (na otoczenie) znajduje swoje zastosowanie zarówno 
+przy zatrzymywaniu ruchu robota w kontakcie z
+obiektami sztywnymi, jak i zręcznym manipulowaniu obiektami miękkimi (np. chwytanie szklanki lub gąbki).
 
-Istnieje cały szereg metod realizacji sterowania siłowego. Jednym z nich jest podatność pasywna, która cechuje się
-szczególną budową manipulatora. Zapewnienie strukturalnej podatności odbywa się za pomocą podatnych ogniw, przegubów, efektora
+Istnieje cały szereg metod stosowanych do sterowania siłowego. Jedną z nich jest podatność pasywna, która wymaga
+szczególnej budowy manipulatora -- podatność realizowana jest poprzez konstrukcję mechaniczną, która pod wpływem zewnętrznych
+oddziaływań zmienia swój kształt (np. zgina się) amortyzując pojawiające się siły. 
+Zapewnienie strukturalnej podatności odbywa się za pomocą podatnych bądź sprężystych ogniw, przegubów, efektora
 czy też podatnych serwomechanizmów, służących do pozycjonowania. Jednym z przykładów jest zastosowanie
-równoległej budowy robota. Podatność pasywna charakteryzuje się dużą prostotą i niskim nakładem kosztów, ze względu na
+równoległej budowy robota. Podatność pasywna charakteryzuje się dużą prostotą (realizacji) i niskim nakładem kosztów, ze względu na
 brak stosowania elektroniki -- czujników i sterowników. Mimo wszystko jest to rozwiązanie mało efektywne -- niemożliwa jest
 szybka rekonfiguracja manipulatora. Ponadto, radzi sobie ono jedynie z niewielkimi niedokładnościami orientacji i pozycjonowania robota.
 Przy większych zaburzeniach nie jesteśmy w stanie jednoznacznie stwierdzić czy pojawiły się duże siły zewnętrzne.
 
 Podatność aktywna manipulatora wynika najczęściej z zastosowanego układu sterowania. Wykorzystując sygnały z
-różnego rodzaju czujników kontroler otrzymuje informacje na temat sił oddziałujących z zewnątrz na manipulator, dzięki
+różnego rodzaju czujników sterownik otrzymuje informacje na temat sił oddziałujących z zewnątrz na manipulator, dzięki
 czemu może on modyfikować trajektorię w czasie rzeczywistym. Ten rodzaj podatności jest bardziej skomplikowany,
 co implikuje większe koszta i wolniejsze działanie. Z drugiej strony aktywna podatność oferuje pełną kontrolę nad
 realizowaną trajektorią, co zwiększa dokładność i powtarzalność sterowania. Ze względu na niedostatecznie szybką reakcję
 na zaburzenia, często do aktywnej podatności dodaje się elementy podatności pasywnej.
 
-Strategie aktywnego kontrolowania interakcji dzieli się na dwie kategorie -- niebezpośrednie i pośrednie.
-Pierwsze z nich, do którego należy kontrola impedancji, nie opiera się na bezpośrednim sprzężeniu zwrotnym od siły, a na analizie ruchu
-i reakcjach robota na zaburzenia w zaplanowanej trajektorii. Kontrolowanie pośrednie opiera się na pełnym modelu zadania interakcji
+Strategie aktywnego kontrolowania interakcji dzieli się na dwie kategorie -- pośrednie i bezpośrednie.
+Pierwsza z nich, do której należy kontrola impedancji, nie opiera się na bezpośrednim sprzężeniu zwrotnym od siły, a na analizie ruchu
+i reakcjach robota na zaburzenia w zaplanowanej trajektorii. Kontrolowanie bezpośrednie opiera się na pełnym modelu zadania interakcji
 i wymaga pełnej informacji zwrotnej. Popularnym i często stosowanym pośrednim podejściem do sterowania manipulatora w kontakcie z nie w 
 pełni znanym środowiskiem jest wykorzystanie hybrydowego połączenia sterowania przyspieszeniem i siłą. 
 Kontrolowanie samej siły nie zapewnia odpowiednich właściwości dynamicznych ruchu
-robota, podczas gdy bez sterowanie przyspieszeniem w kontakcie z przeszkodami prowadzi do błędów wspomnianych wcześniej. 
+robota, podczas gdy sterowanie przyspieszeniem w kontakcie z przeszkodami prowadzi do błędów wspomnianych wcześniej. 
 O ile zastosowanie obu sterowań równolegle jest dość skomplikowane, stosuje się pewne uproszczenia pozwalające zdekomponować
 problem na dwa części. Możliwe jest rozdzielenie stopni swobody robota na pracę w domenie sił i przyspieszeń w taki sposób,
-aby nie zachodziły one na siebie. W rezultacie, można otrzymać manipulator sterujący siłą/momentem jedynie w dwóch kierunkach,
-podczas gdy w pozostałych sterowanie odbywa się standardowo z wykorzystaniem przyspieszeń.
+aby nie zachodziły one na siebie. W rezultacie, otrzymuje się manipulator sterujący siłą/momentem w wybranych kierunkach,
+a położeniem w pozostałych.
 
 
 \chapter{Cele projektu} \label{ch:cele}
@@ -606,7 +613,7 @@ Zależność ta nazywana jest jakobianem manipulatora i definiuje się ją jako 
 \end{equation}
 gdzie
 \begin{equation}
-J(p) = 
+J(p) = \frac{\delta p}{\delta q} = 
 \begin{bmatrix}
 \frac{\delta x_e}{\delta q_{a1}} & \frac{\delta x_e}{\delta q_{a2}} & \frac{\delta x_e}{\delta q_{b1}} & \frac{\delta x_e}{\delta q_{b2}} \\
 \frac{\delta y_e}{\delta q_{a1}} & \frac{\delta y_e}{\delta q_{a2}} & \frac{\delta y_e}{\delta q_{b1}} & \frac{\delta y_e}{\delta q_{b2}} \\
@@ -616,27 +623,84 @@ J(p) =
 \end{equation}
 
 Jakobian wykorzystywany jest do analizy błędów (dokładność pozycjonowania efektora jest zależna od precyzji sterowania napędów),
-kalibracji, analizy statycznej \ref{sec:analiza_statyczna}, a także wyznaczania konfiguracji osobliwych. W manipulatorach 
+kalibracji, analizy statycznej, a także wyznaczania konfiguracji osobliwych. W manipulatorach 
 równoległych proces obliczeniowy jakobianu
-jest z reguły dużo bardziej skomplikowany niż dla manipulatorów szeregowych, ponieważ w najprostszej formie jest on wyznaczany
+jest z reguły dużo bardziej skomplikowany niż dla manipulatorów szeregowych, głównie ze względu na uwikłaną postać równań kinematyki.
+W najprostszej formie jest on wyznaczany
 jako pochodne cząstkowe równań kinematyki (macierz Jacobiego), gdzie zmiennymi są napędy robota ($q_{a1}, q_{a2}, q_{b1}, q_{b2}$). 
-Również w przypadku rozpatrywanego manipulatora macierz ta jest bardzo złożona (obliczenia zostały wykonane z wykorzystaniem
-środowiska \emph{Mathematica}), w związku została ona zamieszczona w załączniku do pracy.
 
-Korzystając z równania \ref{eq:jakobian} możliwe jest obliczenie prędkości obrotowych, które pojawiają się w przegubach
+Również w przypadku rozpatrywanego manipulatora macierz ta jest bardzo skomplikowana (obliczenia zostały wykonane z wykorzystaniem
+środowiska \emph{Mathematica}). Ze względu na ich złożoność, wyprowadzenie równań jakobianu zamieszczono w dodatku. 
+
+
+Korzystając z równania \eqref{eq:jakobian} możliwe jest obliczenie prędkości obrotowych, które pojawiają się w przegubach
 przy zadanej prędkości efektora w przestrzeni zadaniowej. Własność ta jest bardzo przydatna przy doborze napędów robota,
 ponieważ dla założonej maksymalnej prędkości efektora wyznaczane są maksymalne prędkości w przegubach, będące
 jednymi z istotniejszych parametrów silników. Biorąc pod uwagę fakt, że przekładnie zwiększają momenty silników kosztem prędkości obrotowej
 (wyrażanej w obrotach na minutę), konieczne jest wypracowanie kompromisu zapewniającego najefektywniejszą pracę manipulatora.
 
- 
+Zadanie wyznaczania maksymalnych prędkości obrotowych przegubów robota można zdefiniować jako problem optymalizacyjny, w którym to
+przy zadanych ograniczeniach na ruch manipulatora (kąty przegubów), a także zadanej przestrzeni dopuszczalnych prędkości efektora
+należy znaleźć maksymalną dopuszczalną wartość prędkości obrotowej jednego z przegubów. Zadanie to można formalnie przedstawić jako
+problem optymalizacji z ograniczeniami:
+\begin{itemize}
+\item Ograniczenia:
+\begin{itemize}
+\item $q \in Q$,
+\item $\dot{p} \in P$,
+\item $\dot{p}=J(q)\dot{q}$,
+\end{itemize}
+\item Funkcje kryterialne:
+\begin{itemize}
+\item $\dot{q}^2_1$,
+\item $\dot{q}^2_2$.
+\end{itemize}
+\end{itemize}
+Przestrzenie Q oraz P składają się z założonych dopuszczalnych wartości położeń napędów i prędkości efektora. Kwadraty prędkości
+w funkcjach kryterialnych wynikają z potrzeby jednakowej analizy wartości dodatnich i ujemnych. Dla rozpatrywanego manipulatora
+wystarczy wziąć pod uwagę jedynie napędy $q_{a1}$ i $q_{a2}$, ponieważ ze względu na symetryczność pozostałe dwa napędy
+powinny wykazywać te same właściwości.
+
+Proces obliczeniowy umożliwiający rozwiązanie powyższego zadania optymalizacyjnego został przeprowadzony z wykorzystaniem
+środowiska \emph{Mathematica}, które zawiera procedurę \texttt{NMaximize} służącą do znajdywania maksimum funkcji
+kryterialnej przy zadanych ograniczeniach na podstawie obliczeń numerycznych. Sposób wywołania procedury znajduje się
+na listingu \ref{listing}?, natomiast wyniki obliczeń zawiera tabela \ref{tab:maksymalne_predkosci}.
+
+
+\begin{table}[tp]
+  \caption{Analiza statyczna}
+  \label{tab:analiza_statyczna}
+  \centering
+  \begin{tabular}{||c|c||}
+    \hline\hline
+{\bf Parametr} & {\bf Wartość} \\\hline\hline
+$\dot{q}^2_{a1}$ & 2222222 [$\frac{rad}{s}$]\\\hline
+$\dot{q}_{a2}$ & 2222222 [$\frac{rad}{s}$]\\
+$\dot{q}_{b1}$ & 2222222 [$\frac{rad}{s}$]\\
+$\dot{q}_{b2}$ & 2222222 [$\frac{rad}{s}$]\\
+$q_{a1}$ & 2222222 [rad]\\
+$q_{a2}$ & 2222222 [rad]\\
+$q_{b1}$ & 2222222 [rad]\\
+$q_{b2}$ & 2222222 [rad]\\\hline\hline
+$\dot{q}^2_{a2}$ & 2222222 [$\frac{rad}{s}$]\\\hline
+$\dot{q}_{a1}$ & 2222222 [$\frac{rad}{s}$]\\
+$\dot{q}_{b1}$ & 2222222 [$\frac{rad}{s}$]\\
+$\dot{q}_{b2}$ & 2222222 [$\frac{rad}{s}$]\\
+$q_{a1}$ & 2222222 [rad]\\
+$q_{a2}$ & 2222222 [rad]\\
+$q_{b1}$ & 2222222 [rad]\\
+$q_{b2}$ & 2222222 [rad]\\
+\hline\hline
+  \end{tabular}
+\end{table}
+
 
 \section{Analiza statyczna}\label{sec:analiza_statyczna}
 Jednym z zastosowań jakobianu jest analiza statyczna. Umożliwia ona wyznaczenie wektora momentów pojawiających się w napędach
 na skutek sił zewnętrznych działających na manipulator (równanie \ref{eq:analiza_statyczna}). 
-Na podstawie jakobianu opisanego równaniem \ref{eq:jakobian2}, który jest liczony
+Korzystając jakobianu opisanego równaniem \eqref{eq:jakobian2}, który jest liczony
 na podstawie przekształcenia (kinematyki) od napędów do efektora, możliwe jest wyznaczenie momentów w silnikach generowanych
-przez siły działające na efektor. Dla innych punktów przyłożeń sił konieczne byłoby zmodyfikowanie równań kinematyki.
+przez siły działające na efektor. Momenty i siły w innych punktach mogą być wyznaczone po obliczeniu równań kinematyki dla tych punktów.
 \begin{equation}
 \tau=J^Tf.
 \label{eq:analiza_statyczna}
@@ -695,7 +759,8 @@ a także grawitacja. W przypadku braku sprężyn należy zadbać, by położenie
 grawitacji (jedynie prostopadle do niego).
 
 Planarna, prostopadła do siły grawitacji budowa projektowanego manipulatora implikuje stałą energię potencjalną układu. W związku z tym,
-bez potrzeby wprowadzania sprężyn konstruowany robot jest wyważony statycznie.
+bez potrzeby wprowadzania sprężyn konstruowany robot jest wyważony statycznie. Należy jednakże pamiętać, że niewielkie
+zmiany ustawienia manipulatora mogą prowadzić do zaburzeń energii potencjalnej układu.
 
 \section{Dynamika manipulatora}
 Sterowanie robotem najczęściej odbywa się z wykorzystaniem modelu dynamiki. Ciała sztywne stanowiące ogniwa
@@ -738,6 +803,10 @@ Rezultatem wyznaczenia prostej kinematyki jest położenie XY, dla którego odpo
 siatki przestrzeni (ta, w której efektor w zadanej konfiguracji się znajduje)
 zostaje wypełniona jedynką. 
 
+Zwiększenia dokładności obliczeń spowodowało znaczące wydłużenie czasu działania programu. Jako rozwiązanie
+zastosowano iterację kolejnych położeń przegubów z pięciokrotnie większym krokiem, a dokładną analizę przeprowadzano jedynie
+dla tych, które znajdywały się w otoczeniu (w sensie przestrzeni Q) konfiguracji poprawnych.
+
 \subsection{Przestrzeń robocza na bazie odwrotnej kinematyki}
 W przypadku odwrotnej kinematyki stosujemy odwrotne podejście do problemu wyznaczania przestrzeni roboczej. 
 Tym razem zadanie sprowadza się do przejrzenia wszystkich komórek siatki przestrzeni i oznaczeniu
@@ -745,6 +814,12 @@ jedynką tych, dla których możliwe jest wyznaczenie konfiguracji manipulatora,
 znajduje się w aktualnej komórce. W związku z tym funkcja wyznaczająca odwrotną kinematyką
 dla zadanego położenia zwraca wartość \emph{true/false} w zależności od tego czy operacja
 się powiodła. 
+
+Podobnie jak w przypadku kinematyki prostej zwiększenie dokładności obliczeń negatywnie wpłynęło na czas obliczeń. W związku z tym konieczne okazało się
+zmodyfikowanie algorytmu w celu redukcji złożoności obliczeniowej. Wykorzystane zostało założenie mówiące
+o spójności przestrzeni roboczej manipulatora -- jest ona jednym, zwartym obszarem. W konsekwencji, możliwe jest
+wystartowanie obliczeń ze środka tego obszaru i w momencie napotkania końca przestrzeni roboczej zakończenie obliczeń.
+Pozwoliło to na znaczące zwiększenie dokładności obliczeń przy stałym czasie działania programu.
 
 \subsection{Obwiednia przestrzeni roboczej}
 Kolejnym etapem liczenia powierzchni jest wyznaczenie obwiedni przestrzeni roboczej na podstawie
@@ -868,8 +943,9 @@ Jeżeli to byłaby ostateczna wersja manipulatora, jako kompromis wartość z te
 
 \subsection{Wyznaczenie wymiarów ostatecznej wersji manipulatora}
 Analogiczne badania zostały przeprowadzone dla manipulatora docelowego, opisanego w rozdziale \ref{sec:struktura_manipulatora_docelowego}.
-Przestrzeń robocza tego robota jest symetryczna, a także bardziej regularna niż w przypadku wersji próbnej -- brak jest ostrych krawędzi przestrzeni,
-a także jest ona zbliżona do postaci wypukłej. Dla wersji docelowej zwiększona została dokładność obliczeń, co zaowocowało wydłużonym czasem działania
+Przestrzeń robocza tego robota jest symetryczna, a także bardziej regularna niż w przypadku wersji próbnej -- brzegi przestrzeni są
+krzywymi gładkimi, przez co jej kształt jest zbliżony do postaci wypukłej. 
+Dla wersji docelowej zwiększona została dokładność obliczeń, co zaowocowało wydłużonym czasem działania
 programu. Większą dokładność wprowadzono poprzez zwiększenie ziarnistości siatki przestrzeni roboczej, a także poprzez zmniejszenie kroku algorytmu,
 który odpowiadał za wyznaczanie kolejnych konfiguracji. Ponadto długość każdego z ramion iterowana była o wartość 1 (a nie 5 jak poprzednio), 
 w związku z czym optymalny stosunek długości ramion został wyznaczony bardziej precyzyjnie. Ogniwa $l_1-l_4$ iterowane były na przedziale
@@ -904,13 +980,32 @@ Poniżej znajdują się optymalne konfiguracje manipulatora dla kilku wybranych 
 Tak jak poprzednio przy małych odległościach $l_0$ funkcja kryterialna wybierała ogniwo $l_1$ jako najważniejsze, przypisując mu
 największe wartości. W miarę zwiększania $l_0$ maleje znaczenie pierwszego ogniwa, a rośnie trzeciego $l_3$. Takie same wnioski
 można wysnuć zarówno z prostej jak i odwrotnej kinematyki, a rozbieżności w długościach ogniw ponownie wynikają z technik liczenia przestrzeni
-roboczej -- są one zupełnie inne \ref{sec:obliczenie_przestrzeni_roboczej}.
+roboczej -- są one zupełnie inne (rozdz. \ref{sec:obliczenie_przestrzeni_roboczej}).
 
 Dla kilku wybranych konfiguracji możliwie najbardziej różniących się od siebie dla prostej i odwrotnej kinematyki
 wykreślone zostały zależności powierzchni przestrzeni roboczej od odległości początków ramion $l_0$. Znajdują się one
 na rysunkach \ref{rys:l0_prosta_kin} i \ref{rys:l0_odwrotna_kin}.
 
-Wnioski do tych rysunków jak już będą rysunki.
+Największe rozmiary przestrzeni roboczej manipulatora otrzymywane są przy małych wartościach $l_0$, co niesie za sobą stosunkowo
+długie ogniwo $l_1$. Takie konfiguracje niosą za sobą jednakże gorsze własności statyczne manipulatora, które
+odpowiadają za rozkład sił. W konsekwencji, celem niniejszych obliczeń jest znalezienie takiej konfiguracji długości elementów $l_0 -- l_5$, 
+która zapewni stosunkowo dużą przestrzeń roboczą przy dużych wartościach odległości $l_0$. 
+
+Kierując się tym założeniem za najlepszy wybór należy uznać konfiguracje z rysunków \ref{rys:l0_prosta_kin_najlepszy} 
+i \ref{rys:l0_odwrotna_kin_najlepszy}. Optymalne konfiguracje zarówno dla prostej jak i odwrotnej kinematyki okazały się w tych przypadkach zbliżone.
+Zauważalny jest także w obu przypadkach wzrost powierzchni przestrzeni roboczej dla małych wartości $l_0$. W szczególności na rysunku 
+\ref{rys:l0_prosta_kin_najlepszy} można zauważyć, że na pewnym zakresie parametru $l_0$ powierzchnia przestrzeni roboczej zmienia się w 
+niewielkim stopniu, co może mieć pozytywny wpływ na możliwości ruchowe robota. 
+
+Jako wynik przeprowadzonych eksperymentów można w przybliżeniu przyjąć następującą konfigurację: 
+\begin{itemize}
+\item $l_0=10$,
+\item $l_1=28$,
+\item $l_2=23$,
+\item $l_3=41$,
+\item $l_4=10$,
+\end{itemize}
+Długość ogniwa $l_4$ w każdym z algorytmów była minimalizowana, w związku z czym jej wybór może być dowolny.
 
 Przy dobieraniu rzeczywistych długości ramion pod uwagę należy wziąć również mechaniczną konstrukcję robota, która
 wprowadza pewne ograniczenia na długości ogniw. Ponadto, ramiona budowane są z dostępnych elementów, co dodatkowo ogranicza swobodę
@@ -918,48 +1013,50 @@ doboru ich gabarytów. Przy analizie przestrzeni roboczej opierano się jedynie 
 pod uwagę ani łączeń pomiędzy ogniwami, ani mechanicznych możliwości zastosowanych części. W związku z tym niniejsza analiza stanowi
 jedynie podstawę wyboru elementów, a faktyczne długości ramion w oparciu o niniejsze rozważania zostały wyselekcjonowane w rozdziale
 \ref{sec:mechaniczna_konstrukcja_manipulatora}.
-%
-%\begin{figure}[tp]
-%  \setlength{\unitlength}{1.0cm}
-%  \centering
-%	\subfigure[$l_0=0:$ $l_1=43$, $l_2=28$, $l_3=19$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=0}
-%	}
-%	\subfigure[$l_0=5:$ $l_1=24$, $l_2=34$, $l_3=32$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=5}
-%	} \\
-%	\subfigure[$l_0=20:$ $l_1=33$, $l_2=18$, $l_3=39$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=20}
-%	}
-%	\subfigure[$l_0=30:$ $l_1=28$, $l_2=18$, $l_3=44$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Forward/L=30}
-%	}
-%  \label{rys:l0_prosta_kin}  
-%  \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
-%  manipulatora przy wykorzystaniu prostej kinematyki}
-%
-%\end{figure}
-%
-%\begin{figure}[tp]
-%  \setlength{\unitlength}{1.0cm}
-%  \centering
-%	\subfigure[$l_0=0$: $l_1=30$, $l_2=40$, $l_3=30$, $l_4=0$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=0_inv}
-%	}
-%	\subfigure[$l_0=5:$ $l_1=40$, $l_2=24$, $l_3=26$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=5_inv}
-%	} \\
-%	\subfigure[$l_0=20:$ $l_1=33$, $l_2=18$, $l_3=39$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=20_inv}
-%	}
-%	\subfigure[$l_0=30:$ $l_1=28$, $l_2=18$, $l_3=44$, $l_4=10$]{
-%	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/Inverse/L=30_inv}
-%	}
-%  \label{rys:l0_odwrotna_kin}  
-%  \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
-%  manipulatora przy wykorzystaniu odwrotnej}
-%
-%\end{figure}
+
+\begin{figure}[tp]
+  \setlength{\unitlength}{1.0cm}
+  \centering
+	\subfigure[$l_0=0:$ $l_1=31$, $l_2=28$, $l_3=19$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/For_L=0}
+	}
+	\subfigure[$l_0=10:$ $l_1=22$, $l_2=33$, $l_3=35$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/For_L=10}
+	} \\
+	\subfigure[$l_0=20:$ $l_1=25$, $l_2=20$, $l_3=45$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/For_L=20}
+	  \label{rys:l0_prosta_kin_najlepszy}
+	}
+	\subfigure[$l_0=30:$ $l_1=16$, $l_2=29$, $l_3=45$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/For_L=30}
+	}
+  \label{rys:l0_prosta_kin}  
+  \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
+  manipulatora przy wykorzystaniu prostej kinematyki}
+
+\end{figure}
+
+\begin{figure}[tp]
+  \setlength{\unitlength}{1.0cm}
+  \centering
+	\subfigure[$l_0=0$: $l_1=43$, $l_2=28$, $l_3=19$, $l_4=0$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/inv_L=0}
+	}
+	\subfigure[$l_0=10:$ $l_1=39$, $l_2=25$, $l_3=26$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/inv_L=10}
+	} \\
+	\subfigure[$l_0=20:$ $l_1=33$, $l_2=18$, $l_3=39$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/inv_L=20}
+	}
+	\subfigure[$l_0=30:$ $l_1=28$, $l_2=18$, $l_3=44$, $l_4=10$]{
+	  \includegraphics[width=0.4\textwidth]{grafika/docelowa/inv_L=30}
+	  \label{rys:l0_odwrotna_kin_najlepszy}
+	}
+  \label{rys:l0_odwrotna_kin}  
+  \caption{Powierzchnia przestrzeni roboczej w zależności od odległości początków pierwszych ramion 
+  manipulatora przy wykorzystaniu odwrotnej kinematyki}
+
+\end{figure}
 \chapter{Pomiar siły}
 Podatność manipulatora zakłada precyzyjny pomiar sił, którymi oddziałuje on na swoje otoczenie. Rozpoznawanie
 zarówno wartości, jak i kierunków sił jest zadaniem złożonym i wymaga zastosowania dużej liczby czujników, które
@@ -980,7 +1077,9 @@ na efektor na momenty napędowe pojawiające się w silnikach wymaga dodatkowych
 Do pomiaru sił oddziaływania efektora na otoczenie można wykorzystać także tensometry \cite{tensometry}.
 Istnieje wiele rodzajów tensometrów, które różnią się między sobą rozmiarem, dokładnością i odpornością na uszkodzenia mechaniczne.
 Ze względu na dużą dokładność, a także przystępną cenę wybrane zostały tensometry foliowe (rys. \ref{rys:tensometr}), 
-które należą do rodziny tensometrów oporowych. Symbol czujnika to \emph{TEN-TF5/120-P}, a jego parametry znajdują się w tabeli \ref{tab:tensometr}.
+które należą do rodziny tensometrów oporowych. W ostatecznej wersji manipulatora zdecydowano się na gotowe układy
+tensometryczne zwane belkami tensometrycznymi, opisane w rozdziale \ref{sec:belki_tensometryczne}. 
+Symbol rozpatrywanego wcześniej czujnika to \emph{TEN-TF5/120-P}, a jego parametry znajdują się w tabeli \ref{tab:tensometr}.
 W tensometrii elektrooporowej wykorzystuje się zjawisko zmiany rezystancji przewodnika wynikającej z jego wydłużenia lub skrócenia.
 \begin{table}[tp]
   \caption{Parametry tensometru}
@@ -988,6 +1087,7 @@ W tensometrii elektrooporowej wykorzystuje się zjawisko zmiany rezystancji prze
   \centering
   \begin{tabular}{||c|c||}
     \hline\hline
+{\bf Parametr} & {\bf Wartość} \\
 Szerokość & 4.5 mm \\
 Długość & 11 mm \\
 Grubość & 60 $\mu$m \\
@@ -1068,11 +1168,422 @@ gdzie
 \end{equation}
 
 
+\section{Belki tensometryczne}\label{sec:belki_tensometryczne}
+Zastosowanie dwóch kompletnych belek tensometrycznych (rys. \ref{rys:belka_tensometryczna}), złożonych z trzech tensometrów każda, 
+pozwoliło na zredukowanie złożoności aspektu elektronicznego projektu. Ponadto, gotowe układy z reguły cechują się lepszymi
+parametrami, ponieważ zostały wcześniej wspólnie przetestowane (szczególne znaczenie ma tutaj wpływ temperatury na pomiary tensometrów).
+Wykorzystane belki, opisywane symbolem \emph{NA27}, najczęściej używane są do precyzyjnych wag elektronicznych. Ich podstawowe
+parametry zamieszczono w tabeli \ref{tab:belka_tensometryczna}. Każda z belek zawiera wbudowane mostki Wheatstone'a, które
+zapewniają właściwą kompensację temperaturową. Na zewnątrz wyprowadzone są jedynie cztery przewody, opisane w tabeli \ref{tab:wyprowadzenia_belki}.
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.6\textwidth]{grafika/belka_tensometryczna}
+  \caption{Belka tensometryczna \emph{NA27}}
+  \label{rys:belka_tensometryczna}  
+\end{figure}
+
+\begin{table}[tp]
+  \caption{Parametry belki tensometrycznej}
+  \label{tab:belka_tensometryczna}
+  \centering
+  \begin{tabular}{||c|c||}
+    \hline\hline
+    {\bf Parametr} & {\bf Wartość} \\
+Zakres ważenia & do 5 kg \\
+Sygnał wyjściowy max. & $1.0\pm 0.15\frac{mV}{V}$ \\
+Błąd pomiarowy & 0.03\% F.S \\
+Rezystancja wyjściowa mostka & 1000 $\pm 100\Omega$ \\
+Napięcie wzbudzenie mostka & 5 \textdiv 12V DC \\
+Roboczy zakres temperatury pracy & $-20^oC$ \textdiv $+60^oC$ \\
+Bezpieczne przeciążenie & 150\% wartości sygnału wyjściowego \\
+Materiał & stop aluminium \\
+\hline\hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[tp]
+  \caption{Opis kabli belki tensometrycznej}
+  \label{tab:wyprowadzenia_belki}
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+Pobudzenie $U_{we+}$ & Pobudzenie $U_{we-}$ & Wyjście $U_{wy+}$ & Wyjście $U_{wy-}$\\
+\hline
+czerwony & czarny & zielony & biały \\
+\hline
+  \end{tabular}
+\end{table}
+
+Mimo iż belki tensometryczne służą do ważenia położonych na nich obiektów, możliwy jest także pomiar ich naprężeń (wynika to
+z własności tensometrów opisanych w rozdziale \ref{sec:tensometry}). W projektowanym manipulatorze belki będą wchodziły w skład ogniw $l_3$, aby mierzyć
+kierunki i wartości sił działających na efektor na oba ramiona robota. Jako że jest to manipulator planarny, mierzone będą jedynie siły działające w
+jednej płaszczyźnie. Belki zostaną zamocowane tak, aby dwa tensometry mierzyły te siły, natomiast zastosowanie trzeciego tensometru ograniczy się do
+kompensacji temperaturowej.
+
 \subsection{Testy}
+Przed przystąpieniem do eksploatacji urządzenia elektronicznego należy przetestować jego właściwości. Jednym z istotniejszych parametrów
+jest liniowość charakterystyki, która pozwala ocenić przewidywalność i powtarzalność wartości otrzymywanych na wyjściu przy zmianach
+wejścia (w tym przypadku naprężenia). W tym celu skonstruowany został podstawowy układ pomiarowy przedstawiony na schemacie \ref{rys:pomiar_belki}.
+
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.4\textwidth]{grafika/pomiar_belki}
+  \caption{Podstawowy schemat badający liniowość belki tensometrycznej}
+  \label{rys:pomiar_belki}  
+\end{figure}
+
+Znana z dokładnością do jednego grama masa (mierzona za pomocą elektronicznej wagi) wieszana była na haczyku przykręconym do belki
+tensometrycznej. Z drugiej strony belka zamocowana była sztywno w imadle, prostopadle do powierzchni ziemi. W konsekwencji, działająca
+na masę zawieszoną na haczyku siła grawitacji miała znaną wartość i mogła być zmierzona przez tensometry wchodzące w skład belki.
+Pomiar tej siły odbywał się za pomocą woltomierza, który mierzył napięcie na wyjściu mostka Wheatstone'a z dokładnością do 0,1 mV.
+Napięcie zasilania mostka Wheatstone'a, doprowadzone z mikrokontrolera STM32 (takie będzie wykorzystane w manipulatorze docelowym),
+wynosiło +5V. Wykres zależności napięcia wyjściowego od przyłożonej do belki siły zawiera rysunek \ref{rys:belka_liniowosc}, natomiast
+dane pomiarowe znajdują się w tabeli \ref{tab:belka_liniowosc}. Do obliczeń przyjęto przyspieszenie ziemskie wynoszące $g=9.81\frac{m}{s^2}$.
+
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.4\textwidth]{grafika/belka_liniowosc}
+  \caption{Zależność napięcia wyjściowego od siły przyłożonej na jednym z końców belki tensometrycznej}
+  \label{rys:belka_liniowosc}  
+\end{figure}
+
+\begin{table}[tp]
+  \caption{Parametry belki tensometrycznej}
+  \label{tab:belka_liniowosc}
+  \centering
+  \begin{tabular}{||c|c||}
+    \hline\hline
+{\bf Obciążenie [N]} & {\bf Napięcie wyjściowe $U_{wy+}-U_{wy-}$ [mV]} \\
+0 & 0 \\
+0.4709 & 0 \\
+0.5297 & 0.1000 \\
+1.1183 & 0.1000\\
+2.0601 & 0.2000\\
+3.1196 & 0.3000\\
+4.0417 & 0.4000\\
+5.5230 & 0.6000\\
+7.2300 & 0.8000\\
+8.6328 & 0.9000\\
+   10.0552 & 1.1000\\
+   11.9388 & 1.3000\\
+   15.3919 & 1.7000\\
+   17.2754 & 1.9000\\
+   19.9143 & 2.1000\\
+   23.4165 & 2.5000\\
+   26.4478 & 2.8000\\
+   29.9205 & 3.2000\\
+   33.5698 & 3.6000\\
+   36.7679 & 3.9000\\
+   40.5938 & 4.4000\\
+   44.4589 & 4.8000\\
+   48.7851 & 5.2000\\
+   54.1120 & 5.8000\\
+   60.2236 & 6.5000\\
+   64.5596 & 7.0000\\
+\hline\hline
+  \end{tabular}
+\end{table}
+
+Charakterystyka wejściowo-wyjściowa belki tensometrycznej z rysunku \ref{rys:belka_liniowosc} prezentuje się bardzo dobrze. Przy 
+dość ograniczonej dokładności pomiaru (1 mV) wykres jest liniowy dla wszystkich dozwolonych obciążeń belki, co powinno wpłynąć na
+dokładny pomiar siły działającej na poszczególne ramiona manipulatora.
+Dodatkowo, w podobny sposób przeprowadzone zostały testy powtarzalności pomiarów. Przy stałym obciążeniu (zerowym, średnim i maksymalnym) 
+odłączenie i ponowne podłączenie zasilania belki nie zmieniało napięcia zwracanego na wyjście -- bez wyjątku, przy każdym obciążeniu
+pomiary były powtarzalne. Ma to niebagatelne znaczenie przy ocenianiu właściwości czujnika, ponieważ znacząco zwiększa to
+prawdopodobieństwo poprawnych odczytów w kolejnych cyklach pracy robota.
 
 \subsection{Umieszczenie czujników na konstrukcji manipulatora}
 
+\chapter{Układ elektroniczny}
+Przy sterowaniu korzystającym z aktywnej kontroli siły wymagane jest zastosowanie czujników, które są w stanie
+szybko i dokładnie przetwarzać informacje o stanie robota. Ze względu na precyzję i niską cenę najczęściej wykorzystuje
+się czujniki elektroniczne. Każdy z takich czujników wymaga doprowadzenia do niego zasilania, a także
+odprowadzenia pomiaru do jednostki nadrzędnej.
 
+Poza czujnikami układ elektroniczny składa się także z silników i jednostki sterującej (mikrokontrolera).
+Mikrokontroler służy do zbierania pomiarów od czujników, komunikacji z komputerem i generacji sygnałów sterujących podawanych na napędy.
+Silniki są elementami wykonawczymi, które pobudzone odpowiednimi napięciami (sterowaniem) generują ruch robota.
+
+\section{Mikrokontroler}\label{sec:mikrokontroler}
+Jako jednostkę nadrzędną wykorzystano mikrokontroler \emph{STM32F100RBT6B} \cite{stm32f100} wchodzący w skład
+płytki ewaluacyjnej \emph{STM32 value line Discovery} \cite{stmdiscovery}.
+Płytka ta (przedstawiona na rysunku \ref{rys:stm32discovery}) wyposażona jest w dużą liczbę dodatkowych elementów,
+takich jak diody led, przyciski czy port mini-usb. Co szczególnie istotne, możliwe jest programowanie i zasilenie jej bezpośrednio z portu 
+USB, co znacząco ułatwia i przyspiesza proces implementacji. Ponadto, wykorzystując zewnętrzny zasilacz, możliwe jest
+uruchomienie płytki przy dwóch poziomach napięcia zasilania -- 5V i 3.3V.
+
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.4\textwidth]{grafika/stm32discovery}
+  \caption{Układ STM32 Discovery}
+  \label{rys:stm32discovery}  
+\end{figure}
+
+Sam mikrokontroler, zawierający 32-bitową jednostką obliczeniową (mikroprocesor), należy do rodziny Cortex wykorzystującej architekturę ARM.
+Jest to jedna z najczęściej wykorzystywanych obecnie architektur, głównie ze względu na bardzo dobry stosunek jakości do ceny, moc
+obliczeniową i dużą liczbę zewnętrznych peryferiów (takich jak przetworniki analogowo-cyfrowe czy cyfrowe protokoły komunikacyjne).
+Najważniejsze parametry mikrokontrolera zebrane zostały w tabeli \ref{tab:mikrokontroler}. Mikroprocesor wchodzący w skład tej jednostki
+taktowany jest zegarem 24 Mhz, jednakże konfigurując pętlę PLL w odpowiedni sposób możliwe jest otrzymanie częstotliwości 72 Mhz. 
+Dla potrzeb sterowania manipulatora realizowanego w ramach niniejszego projektu jest to w zupełności wystarczające. 
+
+\begin{table}[tp]
+  \caption{Parametry mikrokontrolera}
+  \label{tab:mikrokontroler}
+  \centering
+  \begin{tabular}{||c|c||}
+    \hline\hline
+{\bf Parametr} & {\bf Wartość} \\
+Taktowanie zegara & 24 Mhz \\
+Pamięć Flash & 128 kb \\
+Pamięć SRAM & 8 kb \\
+Rozdzielczość ADC & 12 bitów\\
+Liczba kanałów ADC & 16\\
+Rozdzielczość DAC & 12 bitów\\
+Liczba kanałów ADC & 16\\
+Rozdzielczość timerów & 16 bitów\\
+Liczba timerów & 12\\
+Protokoły komunikacyjne & I2C, SPI, USART\\
+Liczba pinów & 64\\
+\hline\hline
+  \end{tabular}
+\end{table}
+
+\subsection{Programowanie mikrokontrolera}
+Do programowania mikrokontrolera została użyta aplikacja \emph{Keil uVision} \cite{keil}, która jest (stale rozwijanym) jednym z najlepszych
+narzędzi współpracujących z architekturą ARM. Posiada ona wbudowany debugger, który ułatwia testowanie poprawności
+działania programu znajdującego się na mikrokontrolerze. Programowanie układu nie wymaga instalowania dodatkowych sterowników w systemie
+i odbywa się za pomocą zwykłego kabla USB. Największą wadą tego środowiska jest kompatybilność jedynie z systemem operacyjnym Windows.
+
+Program uruchamiany w mikrokontrolerze został napisany w języku C. Ma on na celu przetworzenie pomiarów ze wszystkich czujników,
+przesłanie danych do jednostki nadrzędnej (komputera) za pomocą protokołu RS232 \ref{sec:komunikacja_z_PC}, a także przetworzenie 
+odebranych od komputera danych na sygnały sterujące napędami. Szczegółowy opis implementacji znajduje się w załączniku.
+
+\section{Czujniki}\label{sec:czujniki}
+
+\section{Komunikacja z PC}\label{sec:komunikacja_z_PC}
+Komunikacja mikrokontrolera z komputerem została zrealizowana za pomocą asynchronicznego, szeregowego protokołu \emph{USART}, 
+wykorzystując standard \emph{RS-232}, który
+definiuje normy wtyczek i kabli portów szeregowych typu COM. Parametry transmisji zostały zebrane w tabeli \ref{tab:transmisja}.
+Muszą być one ustawione w ten sam sposób zarówno po stronie mikrokontrolera, jak i komputera.
+
+\begin{table}[tp]
+  \caption{Parametry transmisji danych portem szeregowym}
+  \label{tab:transmisja}
+  \centering
+  \begin{tabular}{||c|c||}
+    \hline\hline
+{\bf Parametr} & {\bf Wartość} \\
+Prędkość & 9600 baud \\
+Parzystość & brak \\
+Bity danych & 8 \\
+Bity stopu & 1 \\
+\hline\hline
+  \end{tabular}
+\end{table}
+
+Zaimplementowana w języku C++ aplikacja umożliwiająca komunikację z mikrokontrolerem przeznaczona jest do pracy w systemie operacyjnym 
+linux, jednakże uruchomienie jej pod systemem Windows jest również możliwe. Przed uruchomieniem programu należy sprawdzić, do którego
+portu COM wtyczka jest podłączona (są to przeważnie wartości z przedziału 0-16, w zależności od systemu operacyjnego) i wprowadzić
+ją jako zmienną do programu. W momencie, gdy parametry transmisji są ustawione następuje otwarcie portu. Wysyłanie
+i odbieranie wiadomości odbywa się w prosty sposób za pomocą spreparowanych do tego funkcji.
+
+Konfiguracja mikrokontrolera w celu komunikacji z komputerem sprowadza się do następujących kroków:
+\begin{itemize}
+\item włączenie zegara dla peryferiów,
+\item ustawienie zegara i kierunkowości portów,
+\item włączenie zegara dla USART,
+\item skonfigurowanie parametrów transmisji (\ref{tab:transmisja}),
+\item włączenie nadajnika i odbiornika w rejestrze CR1,
+\item włączenie protokołu szeregowego w rejestrze CR1.
+\end{itemize}
+Transmisja danych odbywa się poprzez zapis i odczyt bitów z odpowiednich rejestrów. W międzyczasie konieczne jest kontrolowanie bitów odpowiedzialnych
+za zakończoną operację, które są ustawiane sprzętowo. Porty, które wykorzystywane są do transmisji danych zawiera tabela \ref{tab:porty_rs232}.
+
+\begin{table}[tp]
+  \caption{Porty mikrokontrolera wykorzystane do transmisji szeregowej}
+  \label{tab:porty_rs232}
+  \centering
+  \begin{tabular}{||c|c|c||}
+    \hline\hline
+{\bf Parametr} & {\bf Nadajnik} & {\bf Odbiornik} \\
+Funkcja & USART1\_TX & USART1\_RX \\
+Port & A9 & A10\\
+\hline\hline
+  \end{tabular}
+\end{table}
+
+\subsection{Konwersja napięć}
+W mikrokontrolerach najczęściej wykorzystywanym standardem jest \emph{TTL}. Jego działanie opiera się na logice dodatniej -- 
+sygnał niski (logiczne "0") definiuje się jako napięcie od 0 V do 0,8 V w odniesieniu do masy, a wysoki (logiczna "1") -- od 2 V do 5 V.
+Z drugiej strony specyfikacja napięcia standardu RS-232 definiuje jedynkę logiczną jako napięcie od -3V do -15V, zaś zero to napięcie +3V do +15V.
+Różnice pomiędzy standardami wprowadzają konieczność zastosowania układu konwersji napięć, który służy do zmiany napięcia
+sygnału przesyłanego pomiędzy mikrokontrolerem i komputerem. Najczęściej wykorzystywany jest w tym celu układ scalony \emph{MAX232}, który 
+jest dedykowany do tego zastosowania. Schemat skonstruowanego układu znajduje się na rysunku \ref{rys:max232}.
+
+\begin{figure}[tp]
+\centering
+  \includegraphics[width=0.6\textwidth]{grafika/max232}
+  \caption{Układ konwersji napięć pomiędzy standardami TTL i RS-232}
+  \label{rys:max232}  
+\end{figure}
+
+\section{Silniki}
+
+\chapter{Sterowanie manipulatorem}
+Sterowaniem nazywa się proces generowania sygnałów, podawanych na elementy wykonawcze (silniki), na podstawie sygnałów
+pobieranych z czujników. Celem sterowania definiowany jest zazwyczaj w oparciu o konkretną funkcjonalność robota.
+Do najczęściej wykorzystywanych celów zalicza się wymuszanie zadanej trajektorii ruchu manipulatora, 
+utrzymywanie stałej pozycji bądź też
+oddziaływanie określoną siłą na obiekty w otoczeniu. Technikę wyznaczania poziomu sygnałów sterujących nazywa się
+algorytmem sterowania. Pozycjonowanie i ruch manipulatora w przestrzeni roboczej najczęściej odbywa się poprzez zadawanie prędkości
+obrotu silników, jednakże w manipulatorach podatnych brane są pod uwagę także momenty pojawiające się w napędach. W konsekwencji, 
+poza standardowym sterowaniem prędkością ruchu robota dodatkowo wprowadza się pojęcie sterowania siłą, polegające na zadawaniu
+siły oddziaływania efektora z otoczeniem.
+
+Sterowanie siłą (z ang. \texttt{Force Control}) polega na kontroli sił, którymi robot oddziałuje na otoczenie. Zgodnie z tym, 
+co zostało opisane we wstępie (por. \ref{sec:podatnosc}), możliwość kontrolowania stopnia oddziaływania manipulatora na niezależne
+obiekty, z którymi jest on w kontakcie, ma cały szereg zastosowań, takich jak chwytanie lub przesuwanie obiektów.
+
+Istnieje wiele metod sterowania siłą, które stosują różne podejścia do tego problemu. Zostały one porównane w podrozdziale
+\ref{sec:podatnosc}. W dalszej części tego rozdziału dokładniej opisano jedynie sterowanie hybrydowe
+(zaliczające się do kategorii sterowań bezpośrednich), które najlepiej nadaje się do rozpatrywanego manipulatora.
+
+\section{Bezpośrednie sterowanie siłą}
+Zastosowanie bezpośredniego podejścia do siłowego sterowania manipulatorem zakłada wykorzystanie pętli sprzężenia zwrotnego od siły \cite{handbook}.
+Dane dotyczące wartości i kierunków sił, którymi robot oddziałuje na otoczenie są zbierane z wykorzystaniem czujników, a następnie
+wykorzystywane przez algorytm sterowania w celu kompensacji różnicy pomiędzy wartością zadaną, a rzeczywistą.
+W zależności od algorytmu sterowanie siłą może odbywać się naprzemiennie bądź też równolegle do sterowania prędkością.
+Jednym z rozwiązań jest dekompozycja sterowań siłą i prędkością na oddzielne stopnie swobody, co wpływa na zmniejszenie
+przestrzeni roboczej robota, a także ogranicza zestaw jego zastosowań. Z drugiej strony podejście sterowania hybrydowego polega
+na generowaniu wspólnego sygnału sterującego, podawanego na silniki, obliczanego na podstawie ważonego błędu położenia (lub prędkości) i siły.
+
+Skrętnikiem nazywa się wektor o rozmiarze n (liczba stopni swobody robota), który składa się z sił i momentów przyłożonych
+do ciała sztywnego w konkretnym punkcie. Składowe liniowe (siły) odpowiadają położeniowym stopniom swobody, natomiast
+składowe kątowe (momenty) obrotowym. W sterowaniu bezpośrednim za pomocą skrętnika $h_e = (f_e^T m_e^T)T$ opisuje się wektor sił i momentów,
+którymi efektor robota oddziałuje na otoczenie. Celem procesu sterowania jest wyznaczenie skrętnika sterującego $h_c$, 
+wchodzącego w skład dynamicznego modelu robota będącego w kontakcie z otoczeniem, zdefiniowanego dla przestrzeni zadaniowej:
+\begin{equation}
+\Lambda(q)\dot{\upsilon}_e + \Gamma(q, \dot{q})\upsilon_e + \eta(q) = h_c - h_e,
+\label{eq:dynamika_w_kontakcie}
+\end{equation}
+gdzie
+\begin{itemize}
+\item $\upsilon_e = J(q)\dot{q}$ -- prędkość wektora w przestrzeni zadaniowej,
+\item $\Lambda(q) = (JH(q)^{-1}J^T)^{-1}$ -- macierz inercji w przestrzeni zadaniowej,
+\item $\Gamma(q, \dot{q}) = J^{-T}C(q,\dot{q})J^{-1} - \Lambda(q)\dot{q}J^{-1}$ -- odpowiednik macierzy Coriolisa w przestrzeni zadaniowej,
+\item $\eta(q) = J^{-T}g(q)$ -- skrętnik pochodzący od siły grawitacji,
+\item $H(q)$ -- macierz inercji manipulatora,
+\item $C(q, \dot{q})$ -- macierz Coriolisa,
+\item $g(q)$ -- wektor sił grawitacji.
+\end{itemize}
+
+Zadane momenty silników manipulatora $\tau$, które wygenerują pożądany skrętnik sterujący można w prosty sposób wyznaczyć z wykorzystaniem Jakobianu
+i równania:
+\begin{equation}
+\tau = J^Th_c.
+\label{eq:skretnik_sterujacy}
+\end{equation}
+
+Bezpośrednie sterowanie siłą wymaga także pełnej znajomości modelu interakcji manipulatora z otoczeniem, w związku z czym niezbędna
+jest początkowa analiza sytuacji kontaktowych.
+
+\subsection{Kontrola interakcji}\label{sec:kontrola_interakcji}
+Modelowanie zjawisk występujących przy bezpośredniej interakcja robota z otoczeniem nie należy do zadań trywialnych.
+Wpływ na występujące przy kontakcie siły i momenty ma bardzo wiele czynników, takich jak chwilowe przyspieszenie obiektów,
+ich masa, gęstość czy sprężystość. Dokładny opis analityczny wszystkich obserwowanych efektów byłby bardzo pożądany, jednakże
+rzeczywista interakcja, zarówno lokalnie jak i globalnie, w dużym stopniu zależy od dynamiki robota i środowiska.
+Najbardziej skomplikowane zjawiska występujące przy kontakcie robota ze środowiskiem:
+\begin{itemize}
+\item otoczenie wprowadza ograniczenia na kinematykę robota, których naruszenie sprzyja pojawianiu się niezerowego skrętnika 
+(wektora sił i momentów) zarówno po stronie manipulatora, jak i środowiska,
+\item strukturalna podatność robota ma wpływ na wariacje pojawiających się sił i momentów, które są konsekwencją skończonej sztywności
+przegubów i ogniw,
+\item lokalne deformacje powierzchni elementów będących w kontakcie, którym w skutek zużycia zmieniają parametry fizyczne,
+\item brak powierzchni idealnie gładkich implikuje występowanie statycznego i dynamicznego tarcia, które jest trudne do zamodelowania.
+\end{itemize}
+
+W związku z tym, że wygenerowanie bezbłędnego modelu jest operacją niewykonalną, wprowadza się kilka założeń, które
+pozwalają uprościć model interakcji. Wyróżniane są dwa podstawowe podejścia:
+
+\begin{itemize}
+\item robot i elementy środowiska są ciałami idealnie sztywnymi, a ograniczenia na kinematykę wynikają bezpośrednio z konfiguracji otoczenia,
+\item robot jest ciałem idealnie sztywnym, natomiast podatność otoczenia aproksymowana jest przez liniowy model.
+\end{itemize}
+
+W obu przypadkach zakłada się także brak tarcia w sytuacjach kontaktowych. W dalszych rozważaniach pod uwagę będzie brane
+jedynie pierwsze z rozwiązań, ponieważ modelowanie podatności otoczenia jest zadaniem bardziej skomplikowanym,
+głównie ze względu na potrzebę generowania i uwzględniania w obliczeniach dodatkowej macierzy podatności.
+
+\subsection{Hybrydowanie sterowanie prędkością/siłą}
+Sterowanie hybrydowe umożliwia jednoczesną kontrolę zarówno prędkości, jak i siły którą manipulator oddziałuje na otoczenie. 
+W przeciwieństwie do pozostałych metod bezpośrednich nie wymaga ono rozdzielania tych zadań na oddzielne stopnie swobody,
+dzięki czemu możliwe jest sterowanie prędkością i siłą w jednym kierunku. Zastosowanie sterowania hybrydowego pozwala na
+wprowadzenie w manipulatorze aktywnej podatności poprzez analizę pojawiających się zewnętrznych sił w trakcie ruchu robota.
+
+Wyróżnia się trzy podstawowe podejścia do sterowania hybrydowego:
+\begin{itemize}
+\item w oparciu o pasywność dynamiki,
+\item w oparciu o prędkości,
+\item w oparciu o przyspieszenia.
+\end{itemize}
+
+Sterowanie hybrydowe w oparciu o pasywność korzysta ze skośnej symetrii modelu dynamiki robota. Właściwość ta jest
+wykorzystywana bezpośredni przy obliczaniu skrętnika sterującego, przez co wykorzystanie tej metody bez znajomości dynamiki jest niemożliwe.
+Podejście prędkościowe jest stosunkowo najprostszym z rozwiązań, ponieważ nie wymaga ono modelu dynamiki, a sterowanie
+odbywa się w oparciu jedynie o zadaną prędkość (nie ma potrzeby zadawania przyspieszeń). Niestety metoda ta może być
+wykorzystana wyłącznie dla interakcji wystarczająco podatnych, w których nie występują duże przyspieszenia
+przy kontakcie dwóch idealnie sztywnych ciał (jest to jednym z przyjętych założeń, rozdział \ref{sec:kontrola_interakcji}).
+
+Podejście do sterowania hybrydowego korzystając z przyspieszeń opiera się na odpsrzęganiu i linearyzacji nieliniowej dynamiki
+robota. Przy kontakcie robota z otoczeniem odsprzęganie pomiędzy prędkością i siłą jest zjawiskiem bardzo pożądanym. 
+W związku z tym konstruuje się dwie pętle sterowania, wewnętrzną i zewnętrzną. Pierwsza z nich
+odpowiada za kompensację nieliniowej dynamiki robota i rozdzielenie przestrzeni prędkości od przestrzeni sił. 
+Druga natomiast służy do niwelowania błędów w śledzeniu zadanego ruchu i oddziaływań efektora z otoczeniem.
+
+Przy założeniu idealnej sztywności ciał w środowisku zewnętrzny skrętnik, którym robot oddziałuje na otoczenie zapisuje się
+jako $h_e = S_f \lambda$, gdzie $\lambda$ jest wektorem sił zewnętrznych, natomiast $S_f$ jest macierzą przekształcającą
+go do przestrzeni zadaniowej manipulatora. -- Czy to jest dobrze?
+Wektor $\lambda$ zależy od skrętnika sterującego $h_c$, w związku z czym poprzez odpowiedni dobór jego wartości
+możliwe jest kontrolowanie oddziaływania robota na otoczenie. Dla rozpatrywanego podejścia pożądany skrętnik wyznacza się ze wzoru:
+\begin{equation}
+h_c = \Lambda(q)S_v\alpha_v + S_ff_{\lambda} + \mu(q, \dot{q}) + \Lambda(q)\dot{S}_v\upsilon,
+\end{equation}
+gdzie $\alpha_v$ i $f_{\lambda}$ są odpowiednio dobranymi wejściami sterującymi, $\mu(q, \dot{q}) = \Gamma \dot{q} + \eta$, natomiast $S_v$
+jest macierzą transformacji wektora prędkości. 
+
+Wejścia sterujące wykorzystywane są jako druga pętla sprzężenia zwrotnego, której celem jest śledzenie zadanych sił i prędkości. 
+Parametr $f_{\lambda}$ służy do obliczenia sygnału sterującego na podstawie błędu siły definiowanego jako siłę zadaną i rzeczywistą
+pobraną z czujników, przemnożonego przez odpowiednią, pozytywnie zdefiniowaną macierz K (analogicznie do regulatorów PID). 
+Dwa przypadki zdefiniowane w książce \cite{handbook} zawierają równania \eqref{eq:flambda1} i \eqref{eq:flambda2}.
+\begin{equation}
+f_{\lambda} = \lambda_d(t) + K_{P\lambda}[\lambda_d(t) - \lambda(t)],
+\label{eq:flambda1}
+\end{equation}
+
+\begin{equation}
+f_{\lambda} = \lambda_d(t) + K_{I\lambda} \int_0^t \! [\lambda_d(\tau) - \lambda(\tau)] \, \mathrm{d} \tau,
+\label{eq:flambda2}
+\end{equation}
+
+Definicję parametru $\alpha_v$, służącego do sterowania prędkością, zawiera równanie \eqref{eq:alphav1}. Możliwe jest także
+przekształcenie rozpatrywanego zadania do równoległego sterowania siłą i pozycją (co zostanie wykorzystane w rozpatrywanym manipulatorze).
+W takim przypadku parametr $\alpha_v$ definiuje się zgodnie z równaniem \eqref{eq:alphav2}.
+\begin{equation}
+\alpha_v = \dot{\upsilon}_d(t) + K_{P\upsilon}[\upsilon_d(t) - \upsilon(t)] + 
+K_{I\upsilon} \int_0^t \! [\upsilon_d(\tau) - \upsilon(\tau)] \, \mathrm{d} \tau.
+\label{eq:alphav1}
+\end{equation}
+
+\begin{equation}
+\alpha_v = \ddot{r}_d(t) + K_{Dr}[\dot{r}_d(t) - \upsilon(t)] + 
+K_{Pr}[\dot{r}_d(t) - r(t)].
+\label{eq:alphav2}
+\end{equation}
+
+Dla sterowania położeniem zdefiniowanego równaniem \eqref{eq:alphav2} konieczne jest obliczenie drugiej pochodnej położenia,
+co wymusza definiowanie dostatecznie gładkiej trajektorii zadanej.
+
+\section{Algorytm sterowania}
 
 %\chapter{Podsumowanie projektu}
 
@@ -1080,30 +1591,141 @@ gdzie
 
 \appendix
 \chapter{Jakobian manipulatora}\label{sec:dodatek_jakobian_manipulatora}
-$
-J_{11} = 
- -\frac{l_4 (l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}])}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]) \sqrt{1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}} +\\ 
- \\
- +\frac{l_4 (-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2 \sqrt{1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}}+\\
- \\
- +\frac{l_4 (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{2 (2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])} \cdot \\
- \\
- \cdot \langle\frac{\left(\frac{2 (l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}\right)}{ \left(1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}\right)^{3/2}}+\\
+Poszczególne elementy jakobianu manipulatora zostały wyszczególnione poniżej. Ze względu na złożoność równań,
+wprowadzono szereg podstawień:\\
 \\
--\frac{\frac{2 (-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 \text{l0}+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^3}}{\left(1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}\right)^{3/2}}\rangle+\\
- \\
- -l_3 \langle\frac{\frac{l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]}{2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]}-\frac{(-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}{1+\frac{(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2}}\\
- \\
- -\langle\frac{2 (2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]) (-l_1 \sin[q_{a1}]-l_2 \sin[q_{a1}+q_{a2}])}{4 l_3 \sqrt{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}}+\\
- \\
- + \frac{2 (l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]) (l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])}{4 l_3 \sqrt{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}} \rangle\cdot \\
- \\
- \cdot \frac{1}{\sqrt{1-\frac{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}{4 l_3^2}}}\rangle \\
- \\
- \sin\langle\arccos\left[\frac{\sqrt{(2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}])^2+(l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}])^2}}{2 l_3}\right] +\\
- \\
- +\arctan\left[\frac{l_1 \sin[q_{a1}]+l_2 \sin[q_{a1}+q_{a2}]-l_1 \sin[q_{b1}]-l_2 \sin[q_{b1}+q_{b2}]}{2 l_0+l_1 \cos[q_{a1}]+l_2 \cos[q_{a1}+q_{a2}]-l_1 \cos[q_{b1}]-l_2 \cos[q_{b1}+q_{b2}]}\right]\rangle 
 $
+s_{a1} = \sin(q_{a1})\\
+c_{a1} = \cos(q_{a1})\\
+s_{a2} = \sin(q_{a2})\\
+c_{a2} = \cos(q_{a2})\\
+s_{b1} = \sin(q_{b1})\\
+c_{b1} = \cos(q_{b1})\\
+s_{b2} = \sin(q_{b2})\\
+c_{b2} = \cos(q_{b2})\\
+s_{aa} = \sin(q_{a1}+q_{a2})\\
+c_{aa} = \cos(q_{a1}+q_{a2})\\
+s_{bb} = \sin(q_{b1}+q_{b2})\\
+c_{bb} = \cos(q_{b1}+q_{b2})\\
+s_{ab} = \sin(q_{a1}-q_{b1})\\
+c_{ab} = \cos(q_{a1}-q_{b1})\\
+s_{aab} = \sin(q_{a1}+q_{a2}-q_{b1})\\
+c_{aab} = \cos(q_{a1}+q_{a2}-q_{b1})\\
+s_{abb} = \sin(q_{a1}-q_{b1}-q_{b2})\\
+c_{abb} = \cos(q_{a1}-q_{b1}-q_{b2})\\
+s_{aabb} = \sin(q_{a1}+q_{a2}-q_{b1}-q_{b2})\\
+c_{aabb} = \cos(q_{a1}+q_{a2}-q_{b1}-q_{b2})\\
+x_a = l_0 + l_1 \cos(q_{a1}) + l_2 \cos(q_{a1}+q_{a2})\\
+x_b = -l_0 + l_1 \cos(q_{b1}) + l_2 \cos(q_{b1}+q_{b2})\\
+y_a = l_1 \sin(q_{a1}) + l_2 \sin(q_{a1}+q_{a2})\\
+y_b = l_1 \sin(q_{b1}) + l_2 \sin(q_{b1}+q_{b2})
+$
+\\\\
+Elementy jakobianu zadane są wzorami:\\
+\begin{multline*}
+J_{11} = 
+\frac{l_4 (y_a - y_b)^2 ((x_a - l_0) (x_a - x_b)+(y_a) (y_a - y_b))}{(x_a - x_b)^4 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+\\
+-\frac{l_4 (x_a - l_0)}{(x_a - x_b) \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}-\frac{l_4 (y_a) (y_a - y_b)}{(x_a - x_b)^2 \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}+\\
+-l_3\left(\frac{(x_a - l_0) (x_a - x_b)+(y_a) (y_a - y_b)}{(x_a - x_b)^2 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)} -
+\frac{-2 l_0 y_a+l_1^2 s_{ab}+l_1 l_2 s_{aab}+l_1 l_2 s_{abb}+l_2^2 s_{aabb}}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\right) \cdot\\ \cdot \sin\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] 
+\end{multline*}
+
+\begin{multline*}
+J_{12} = 
+ -\frac{l_2 l_4 (-l_2-l_1 c_{a2}-2 l_0 c_{aa}+l_1 c_{aab}+l_2 c_{aabb}) (y_a - y_b)^2}{(x_a - x_b)^4 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+\\
+ -\frac{l_2 l_4 c_{aa}}{(x_a - x_b) \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}-\frac{l_2 l_4 s_{aa} (y_a - y_b)}{(x_a - x_b)^2 \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}+
+ \\
+ -l_3 \langle-\frac{l_2 (-l_2-l_1 c_{a2}-2 l_0 c_{aa}+l_1 c_{aab}+l_2 c_{aabb})}{2 \left(2 l_0^2+l_1^2+l_2^2+2 l_0 x_a+l_1 l_2 c_{a2}-l_1^2 c_{ab}-l_1 l_2 c_{aab}-2 l_0 l_1 x_b-l_1 l_2 c_{abb}-l_2^2 c_{aabb}+l_1 l_2 c_{b2}\right)}
+ \\
+ -\frac{l_2 (-l_1 s_{a2}-2 l_0 s_{aa}+l_1 s_{aab}+l_2 s_{aabb})}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\rangle \cdot 
+ \\ \cdot \sin\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] 
+\end{multline*}
+
+\begin{multline*}
+J_{13} = 
+ -l_1 s_{b1}-l_2 s_{bb}+\\
+ +\frac{l_4 \left(-l_1^2-l_2^2+l_1^2 c_{ab}+l_1 l_2 c_{aab}+2 l_0 l_1 c_{b1}+l_1 l_2 c_{abb}+l_2^2 c_{aabb}-2 l_1 l_2 c_{b2}+2 l_0 l_2 c_{bb}\right) (y_a - y_b) (-y_a+y_b)}{(x_a - x_b)^4 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+\\
+ -\frac{l_4 (x_b - l_0)}{(-2 l_0-l_1 c_{a1}-l_2 c_{aa}+x_b - l_0) \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}+\frac{l_4 (y_a - y_b) (y_b)}{(x_a - x_b)^2 \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}+
+ \\
+ -l_3 \langle\frac{(x_b - l_0) (-2 l_0-l_1 c_{a1}-l_2 c_{aa}+x_b - l_0)+(y_b) (-y_a+y_b)}{(x_a - x_b)^2 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)}+\\
+ +\frac{l_1^2 s_{ab}+l_1 l_2 s_{aab}-2 l_0 l_1 s_{b1}+l_1 l_2 s_{abb}+l_2^2 s_{aabb}-2 l_0 l_2 s_{bb}}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\rangle \cdot 
+ \\
+ \cdot \sin\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] 
+\end{multline*}
+
+\begin{multline*}
+J_{14} = 
+ -l_2 s_{bb}+\frac{l_2 l_4 (-l_2+l_1 c_{abb}+l_2 c_{aabb}-l_1 c_{b2}+2 l_0 c_{bb}) (y_a - y_b) (-y_a+y_b)}{(x_a - x_b)^4 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+\\
+ +\frac{l_2 l_4 c_{bb}}{(x_a - x_b) \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}} +\frac{l_2 l_4 s_{bb} (y_a - y_b)}{(x_a - x_b)^2 \sqrt{1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}}}
+ \\
+ -l_3 \langle\frac{-l_2 (-l_2+l_1 c_{abb}+l_2 c_{aabb}-l_1 c_{b2}+2 l_0 c_{bb})}{2 \left(2 l_0^2+l_1^2+l_2^2+2 l_0 l_1 (c_{a1}-c_{b1})+l_1 l_2 (c_{a2} + c_{b2} - c_{aab} - c_{abb} )+2 l_0 l_2 (c_{aa}-c_{bb})-l_1^2 c_{ab}-l_2^2 c_{aabb}\right)}+
+ \\
+ +\frac{l_2 (l_1 s_{abb}+l_2 s_{aabb}+l_1 s_{b2}-2 l_0 s_{bb})}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\rangle \cdot 
+ \\
+ \cdot \sin\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right]
+\end{multline*}
+
+\begin{multline*}
+J_{21} = 
+ -\frac{l_4 (y_a - y_b) ((x_a - l_0) (x_a - x_b)+(y_a) (y_a - y_b))}{(x_a - x_b)^3 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+\\
+ +l_3 \cos\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] \cdot
+ \\
+ \cdot \left(\frac{(x_a - l_0) (x_a - x_b)+(y_a) (y_a - y_b)}{(x_a - x_b)^2 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)}-\frac{-2 l_0 l_1 s_{a1}-2 l_0 l_2 s_{aa}+l_1^2 s_{ab}+l_1 l_2 s_{aab}+l_1 l_2 s_{abb}+l_2^2 s_{aabb}}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\right) 
+\end{multline*}
+
+\begin{multline*}
+J_{22} = 
+ \frac{l_2 l_4 (-l_2-l_1 c_{a2}-2 l_0 c_{aa}+l_1 c_{aab}+l_2 c_{aabb}) (y_a - y_b)}{(x_a - x_b)^3 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+\\
+ +l_3 \cos\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] \cdot
+ \\
+ \cdot \langle-\frac{l_2 (-l_2-l_1 c_{a2}-2 l_0 c_{aa}+l_1 c_{aab}+l_2 c_{aabb})}{2 \left(2 l_0^2+l_1^2+l_2^2+2 l_0 l_1 (c_{a1}-c_{b1})+l_1 l_2 (c_{a2} + c_{b2} - c_{aab}-c_{abb})+2 l_0 l_2 (c_{aa}-c_{bb})-l_1^2 c_{ab}-l_2^2 c_{aabb}\right)}+
+ \\
+ -\frac{l_2 (-l_1 s_{a2}-2 l_0 s_{aa}+l_1 s_{aab}+l_2 s_{aabb})}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\rangle
+\end{multline*}
+
+\begin{multline*}
+J_{23} = 
+ x_b - l_0+\\
+ -\frac{l_4 \left(-l_1^2-l_2^2+l_1^2 c_{ab}+l_1 l_2 c_{aab}+2 l_0 l_1 c_{b1}+l_1 l_2 c_{abb}+l_2^2 c_{aabb}-2 l_1 l_2 c_{b2}+2 l_0 l_2 c_{bb}\right) (-y_a+y_b)}{(x_a - x_b)^3 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+
+ \\
+ +l_3 \cos\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] \cdot
+ \\
+ \cdot \langle\frac{(x_b - l_0) (-2 l_0-l_1 c_{a1}-l_2 c_{aa}+x_b - l_0)+(y_b) (-y_a+y_b)}{(x_a - x_b)^2 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)}+\\
+ +\frac{l_1^2 s_{ab}+l_1 l_2 s_{aab}-2 l_0 l_1 s_{b1}+l_1 l_2 s_{abb}+l_2^2 s_{aabb}-2 l_0 l_2 s_{bb}}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\rangle 
+\end{multline*}
+
+\begin{multline*}
+J_{24} = 
+ l_2 c_{bb}-\frac{l_2 l_4 (-l_2+l_1 c_{abb}+l_2 c_{aabb}-l_1 c_{b2}+2 l_0 c_{bb}) (-y_a+y_b)}{(x_a - x_b)^3 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)^{3/2}}+
+ \\
+ +l_3 \cos\left[\text{arcsec}\left[\frac{2 l_3}{\sqrt{(x_a - x_b)^2+(y_a - y_b)^2}}\right]+\arctan\left[\frac{y_a - y_b}{x_a - x_b}\right]\right] \cdot
+ \\
+ \cdot \langle-\frac{l_2 (-l_2+l_1 c_{abb}+l_2 c_{aabb}-l_1 c_{b2}+2 l_0 c_{bb})}{2 \left(2 l_0^2+l_1^2+l_2^2+2 l_0 l_1 (c_{a1}-c_{b1})+l_1 l_2 (c_{a2}+c_{b2}-c_{aab}-c_{abb})+2 l_0 l_2 (c_{aa}-c_{bb})-l_1^2 c_{ab}-l_2^2 c_{aabb}\right)}+
+ \\
+ +\frac{l_2 (l_1 s_{abb}+l_2 s_{aabb}+l_1 s_{b2}-2 l_0 s_{bb})}{2 l_3 \sqrt{(x_a - x_b)^2+(y_a - y_b)^2} \sqrt{1-\frac{(x_a - x_b)^2+(y_a - y_b)^2}{4 l_3^2}}}\rangle
+\end{multline*}
+
+\begin{equation*}
+J_{31} = 
+ \frac{(x_a - l_0) (x_a - x_b)+(y_a) (y_a - y_b)}{(x_a - x_b)^2 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)} 
+\end{equation*}
+
+\begin{equation*}
+J_{32} = 
+ -\frac{l_2 (-l_2-l_1 c_{a2}-2 l_0 c_{aa}+l_1 c_{aab}+l_2 c_{aabb})}{2 \left(2 l_0^2+l_1^2+l_2^2+2 l_0 l_1 (c_{a1}-c_{b1})+l_1 l_2 (c_{a2}+c_{b2}-c_{aab}-c_{abb})+2 l_0 l_2 (c_{aa}-c_{bb})-l_1^2 c_{ab}-l_2^2 c_{aabb}\right)} 
+\end{equation*}
+
+\begin{equation*}
+J_{33} = 
+ \frac{(x_b - l_0) (-2 l_0-l_1 c_{a1}-l_2 c_{aa}+x_b - l_0)+(y_b) (-y_a+y_b)}{(x_a - x_b)^2 \left(1+\frac{(y_a - y_b)^2}{(x_a - x_b)^2}\right)} 
+\end{equation*}
+
+\begin{equation*}
+J_{34} = 
+ -\frac{l_2 (-l_2+l_1 c_{abb}+l_2 c_{aabb}-l_1 c_{b2}+2 l_0 c_{bb})}{2 \left(2 l_0^2+l_1^2+l_2^2+2 l_0 l_1 (c_{a1}-c_{b1})+l_1 l_2 (c_{a2}+c_{b2}-c_{aab}-c_{abb})+2 l_0 l_2 (c_{aa}-c_{bb})-l_1^2 c_{ab}-l_2^2 c_{aabb}\right)}
+\end{equation*}
+
+
 %\chapter{Zawartość płyty CD}
 %Do pracy dołączono płytę CD zawierającą:
 %\begin{enumerate}
