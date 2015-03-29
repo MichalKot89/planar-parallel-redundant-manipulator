@@ -1,0 +1,1 @@
+It is project which is about to build and control planar parallel redundant manipulator.
